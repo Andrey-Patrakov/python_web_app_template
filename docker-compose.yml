@@ -1,41 +1,40 @@
+version: '3.8'
+
 services:
-  postgres:
-    image: postgres:latest
-    container_name: postgres_fast_api
-    environment:
-      POSTGRES_USER: amin
-      POSTGRES_PASSWORD: my_super_password
-      POSTGRES_DB: fast_api
-      PGDATA: /var/lib/postgresql/data/pgdata
+
+  backend:
+    build: ./services/backend
     ports:
-      - "5433:5432"
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+      - BACKEND_URL=${BACKEND_HOST}:${BACKEND_PORT}
     volumes:
-      - pgdata:/var/lib/postgresql/data/pgdata
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
+      - ./services/backend:/app
     command: >
-      postgres -c max_connections=1000
-               -c shared_buffers=256MB
-               -c effective_cache_size=768MB
-               -c maintenance_work_mem=64MB
-               -c checkpoint_completion_target=0.7
-               -c wal_buffers=16MB
-               -c default_statistics_target=100
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres_user -d postgres_db" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    restart: unless-stopped
-    tty: true
-    stdin_open: true
+      bash -c "
+        alembic revision --autogenerate &&
+        alembic upgrade head &&
+        uvicorn app.main:app --reload --host 0.0.0.0 --port ${BACKEND_PORT}
+      "
+    depends_on:
+      - database
+
+  database:
+    image: postgres:15.1
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./postgres_data/:/var/lib/postgresql/data/
 
 volumes:
-  pgdata:
-    driver: local
+  postgres_data:
