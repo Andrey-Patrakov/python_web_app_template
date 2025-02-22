@@ -13,12 +13,16 @@ class SettingsDB(BaseSettings):
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict()
+
     db: SettingsDB = SettingsDB()
 
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+
+    BACKEND_URL: str
+    FRONTEND_URL: str
 
 
 settings = Settings()
