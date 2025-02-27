@@ -1,4 +1,3 @@
-from pydantic import EmailStr
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status, Response
 from .tokens import create_access_token
@@ -21,7 +20,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-async def authenticate_user(email: EmailStr, password: str):
+async def authenticate_user(email: str, password: str):
     user = await UsersDAO.get_user_by_email(email=email)
     if not user:
         return None

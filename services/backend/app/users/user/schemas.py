@@ -9,7 +9,7 @@ class UserRegisterSchema(BaseModel):
 
 
 class UserAuthSchema(BaseModel):
-    email: EmailStr = Field(..., description='Email пользователя')
+    email: str = Field(..., description='Email или логин пользователя')
     password: str = Field(..., min_length=5, max_length=50, description='Пароль пользователя') # noqa
 
 

@@ -13,7 +13,9 @@ router = APIRouter(prefix='/auth', tags=['Авторизация и аутент
 
 @router.post('/register')
 async def register(user_in: UserRegisterSchema) -> dict:
-    user = await UsersDAO.get_user_by_email(user_in.email)
+    user = await UsersDAO.check_user_exists(
+        email=user_in.email, username=user_in.username)
+
     if user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
