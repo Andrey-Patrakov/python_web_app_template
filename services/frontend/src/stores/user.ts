@@ -22,7 +22,7 @@ export const userStore = defineStore('user', {
     },
 
     async login(user: object) {
-      await axios.post('/auth/login', user).then(async (res) => {
+      await axios.post('/auth/login', user).then(async () => {
         await this.viewMe();
       });
       return user;

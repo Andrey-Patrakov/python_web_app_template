@@ -1,49 +1,45 @@
 <template>
   <v-list-group
-    v-if="data.children && data.children.length"
-    :value="data.name"
+    v-if="props.data.children && props.data.children.length"
+    :value="props.data.title"
   >
-    <template v-slot:activator="{ props }">
+    <template #activator>
       <v-list-item
-        v-bind="props"
-        :prepend-icon="data.icon"
-        :title="data.title"
-      ></v-list-item>
-      <v-divider class="border-opacity-50"></v-divider>
+        :prepend-icon="props.data.icon"
+        :title="props.data.title"
+      />
+      <v-divider class="border-opacity-50" />
     </template>
 
     <link-list-node
+      v-for="row in props.data.children"
+      :key="row.title"
       :data="row"
-      v-for="row in data.children"
-    ></link-list-node>
+    />
   </v-list-group>
 
   <template v-else>
     <v-list-item
-      v-if="'click' in data"
-      :prepend-icon="data.icon"
-      :to="data.link"
-      :title="data.title"
-      @click="data.click()"
-    ></v-list-item>
+      v-if="props.data.click"
+      :prepend-icon="props.data.icon"
+      :to="props.data.link"
+      :title="props.data.title"
+      @click="props.data.click()"
+    />
     <v-list-item
       v-else
-      :prepend-icon="data.icon"
-      :to="data.link"
-      :title="data.title"
-    ></v-list-item>
-    <v-divider class="border-opacity-50"></v-divider>
+      :prepend-icon="props.data.icon"
+      :to="props.data.link"
+      :title="props.data.title"
+    />
+    <v-divider class="border-opacity-50" />
   </template>
 </template>
 
 <script lang="ts" setup>
-</script>
-
-<script lang="ts">
-export default {
-  name: 'link-list-node',
-  props: {
-    data: { type: Object, required: true },
-  },
-}
+import LinkListNode from './LinkListNode.vue';
+import type ListNodeInteface from './listNodeInterface';
+const props = defineProps<{
+  data: ListNodeInteface,
+}>();
 </script>

@@ -1,20 +1,17 @@
 <template>
-    <v-list class="py-0">
-        <link-list-node :data="row" v-for="row in data"></link-list-node>
-    </v-list>
+  <v-list class="py-0">
+    <link-list-node
+      v-for="row in props.data"
+      :key="row.title"
+      :data="row"
+    />
+  </v-list>
 </template>
 
 <script lang="ts" setup>
-</script>
-
-<script lang="ts">
-    import LinkListNode from './LinkListNode.vue';
-    export default {
-        props: {
-            data: { type: Object, required: true },
-        },
-        components: {
-            LinkListNode,
-        },
-    }
+import LinkListNode from './LinkListNode.vue';
+import type ListNodeInteface from './listNodeInterface';
+const props = defineProps<{
+  data: ListNodeInteface[],
+}>();
 </script>

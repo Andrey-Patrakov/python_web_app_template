@@ -1,12 +1,13 @@
+import { inject } from 'vue';
 import type { App } from 'vue'
-import { inject } from 'vue'
 
 interface Rules {
-  requred: Function,
-  username: Function,
-  email: Function,
-  password: Function,
-  passwordRepeat: Function,
+  requred: (value: string) => boolean | string,
+  min_str_length: (len: number) => (value: string) => boolean | string,
+  username: (value: string) => boolean | string,
+  email: (value: string) => boolean | string,
+  password: (value: string) => boolean | string,
+  passwordRepeat: (value: string) => (value: string) => boolean | string,
 }
 
 const rules = <Rules>{
@@ -44,12 +45,12 @@ const rules = <Rules>{
   },
 };
 
-export const installRules = {
+export const rulesPlugin = {
   install: (app: App) => {
     app.provide('$rules', rules);
   }
 }
 
-export default function (): any {
-  return inject('$rules');
+export default function injectRules() {
+  return <Rules>inject('$rules');
 }
