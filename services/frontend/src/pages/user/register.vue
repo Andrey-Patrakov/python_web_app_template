@@ -119,7 +119,7 @@ const submit = async () => {
       if (typeof error?.response?.data?.detail == 'string') {
         errorMessage.value = error.response.data.detail;
       } else {
-        errorMessage.value = 'Ошибка создания пользователя, проверьте правильность заполнения полей.';
+        errorMessage.value = `${error.code}: ${error.message}`;
       }
     }
   }
