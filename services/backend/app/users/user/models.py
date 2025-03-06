@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped
 from app.database.models import Base, int_pk, bool_true, created_at
-from app.database.models import str_not_null, str_uniq
+from app.database.models import str_not_null, str_null, str_uniq
 
 
 class User(Base):
@@ -9,5 +9,6 @@ class User(Base):
     email: Mapped[str_uniq]
     username: Mapped[str_uniq]
     password: Mapped[str_not_null]
+    description: Mapped[str_null]
     is_active: Mapped[bool_true]
     created_at: Mapped[created_at]

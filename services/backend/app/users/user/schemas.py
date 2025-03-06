@@ -19,5 +19,12 @@ class UserSchema(BaseModel):
     id: int = Field(..., description='Идентификатор пользователя')
     email: EmailStr = Field(..., description='Email пользователя')
     username: str = Field(..., description='Логин пользователя')
+    description: str | None = Field(..., description="Описание пользователя")
     is_active: bool = Field(..., description='Активен ли пользователь')
     created_at: datetime = Field(..., description='Дата создания пользователя')
+
+
+class UserUpdateInfoSchema(BaseModel):
+    email: EmailStr = Field(..., description='Email пользователя')
+    username: str = Field(..., description='Логин пользователя')
+    description: str | None = Field(..., max_length=1000, description="Описание пользователя") # noqa

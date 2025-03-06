@@ -3,6 +3,7 @@ from ..user.dao import UsersDAO
 
 from ..user.models import User
 from ..user.schemas import UserRegisterSchema, UserAuthSchema, UserSchema
+from ..user.schemas import UserUpdateInfoSchema
 from .auth import get_password_hash, authenticate_user
 from .auth import get_current_user, logout_current_user
 from .tokens import create_access_token, create_refresh_token
@@ -65,3 +66,12 @@ async def get_me(user_data: User = Depends(get_current_user)) -> UserSchema:
 @router.post('/logout')
 async def logout(detail: dict = Depends(logout_current_user)) -> dict:
     return detail
+
+
+@router.post('/upd_info')
+async def update_user_info(
+        info: UserUpdateInfoSchema,
+        user: User = Depends(get_current_user)) -> dict:
+    info_dict = info.model_dump()
+    await UsersDAO.update(filter_by={"id": user.id}, **info_dict)
+    return {'message': 'Данные обновлены успешно!'}

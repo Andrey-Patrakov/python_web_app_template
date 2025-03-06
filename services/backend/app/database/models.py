@@ -9,6 +9,7 @@ from sqlalchemy.orm import mapped_column
 int_pk = Annotated[int, mapped_column(primary_key=True)]
 str_uniq = Annotated[str, mapped_column(unique=True, nullable=False)]
 str_not_null = Annotated[str, mapped_column(nullable=False)]
+str_null = Annotated[str, mapped_column(nullable=True)]
 bool_true = Annotated[bool, mapped_column(default=True)]
 created_at = Annotated[datetime, mapped_column(server_default=func.now())]
 
