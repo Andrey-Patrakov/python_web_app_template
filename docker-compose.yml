@@ -38,6 +38,27 @@ services:
     volumes:
       - './services/frontend:/app'
 
+  storage:
+    image: minio/minio:latest
+    restart: always
+    command: server --console-address \"9001\" /data
+    entrypoint: |
+      sh -c "
+      minio server --console-address \":9001\" /data & 
+      MINIO_PID=\$! && 
+      sleep 5 && 
+      /bin/sh /usr/bin/create_buckets.sh && 
+      wait \$MINIO_PID
+      "
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - ./storage_data:/data
+      - ./services/storage/create_buckets.sh:/usr/bin/create_buckets.sh
+    env_file:
+      - ./.env
+
   database:
     image: postgres:15.1
     ports:
@@ -51,3 +72,4 @@ services:
 
 volumes:
   postgres_data:
+  storage_data:
