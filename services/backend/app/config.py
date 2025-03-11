@@ -11,11 +11,22 @@ class SettingsDB(BaseSettings):
     PASSWORD: str
 
 
+class SettingsStorage(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix='STORAGE_')
+
+    URL: str
+    BUCKET: str
+    ACCESS_KEY: str
+    SECRET_KEY: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict()
 
     db: SettingsDB = SettingsDB()
+    storage: SettingsStorage = SettingsStorage()
 
+    REGION_NAME: str = 'ru-moscow'
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30

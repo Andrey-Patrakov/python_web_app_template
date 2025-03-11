@@ -7,15 +7,21 @@ services:
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     environment:
+      - REGION_NAME=${REGION_NAME}
+      - SECRET_KEY=${SECRET_KEY}
+      - BACKEND_URL=${BACKEND_HOST}:${BACKEND_PORT}
+      - FRONTEND_URL=${FRONTEND_HOST}:${FRONTEND_PORT}
+
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
 
-      - SECRET_KEY=${SECRET_KEY}
-      - BACKEND_URL=${BACKEND_HOST}:${BACKEND_PORT}
-      - FRONTEND_URL=${FRONTEND_HOST}:${FRONTEND_PORT}
+      - STORAGE_URL=storage:9000
+      - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - STORAGE_BUCKET=${MINIO_BUCKET_NAME}
     volumes:
       - ./services/backend:/app
     command: >
@@ -47,23 +53,13 @@ services:
     volumes:
       - ./storage_data:/data
     environment:
-      - MINIO_REGION_NAME=${MINIO_REGION_NAME}
+      - MINIO_REGION_NAME=${REGION_NAME}
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY${MINIO_SECRET_KEY}
     command: server --console-address :9001 /data
     restart: unless-stopped
-
-  create_backets:
-    image: minio/mc
-    depends_on:
-      - storage
-    entrypoint: >
-      /bin/sh -c "
-      /usr/bin/mc alias set myminio http://storage:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
-      /usr/bin/mc mb myminio/${MINIO_BACKET_NAME};
-      /usr/bin/mc policy set public myminio/${MINIO_BACKET_NAME};
-      exit 0;
-      "
 
   database:
     image: postgres:15.1
