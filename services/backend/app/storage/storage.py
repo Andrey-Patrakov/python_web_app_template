@@ -34,6 +34,9 @@ class Storage:
 
             yield response.read()
 
+    def delete(self, name: str):
+        self.client.remove_object(self.bucket, name)
+
     def make_bucket(self, name):
         if self.client.bucket_exists(name):
             return False

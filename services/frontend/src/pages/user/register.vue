@@ -114,7 +114,7 @@ const submit = async () => {
   else {
     try {
       await user.register(userForm.value);
-      router.push('/user/login');
+      router.replace('/user/login');
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       if (typeof error?.response?.data?.detail == 'string') {
         errorMessage.value = error.response.data.detail;

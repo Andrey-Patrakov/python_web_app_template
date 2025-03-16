@@ -91,9 +91,11 @@ const submit = async () => {
   if (!isValid.value) {
     errorMessage.value = 'Поля заполнены некорректно';
   } else {
+    errorMessage.value = '';
     try {
       await user.login(userForm.value);
-      router.push('/user')
+      router.replace('/user');
+      return 0;
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       if (typeof error?.response?.data?.detail == 'string') {
         errorMessage.value = error.response.data.detail;

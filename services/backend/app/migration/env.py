@@ -17,6 +17,7 @@ from app.database.models import Base # noqa
 
 from app.users import User # noqa
 from app.users import BlacklistedToken # noqa
+from app.storage import File # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -4,7 +4,7 @@
     width="700"
   >
     <v-card-title>
-      <h2>Пользователь: {{ user.username }}</h2>
+      Пользователь: {{ user.username }}
     </v-card-title>
 
     <v-divider />
