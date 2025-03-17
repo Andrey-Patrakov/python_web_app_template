@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <v-card>
+    <v-card :disabled="fileProgress > 0">
       <v-card-title>Файловое хранилище</v-card-title>
 
-      <v-card-subtitle>
+      <!-- <v-card-subtitle>
         <v-progress-linear
           v-model="ailableSpace"
           height="50"
@@ -12,7 +12,7 @@
         >
           Доступное место на диске
         </v-progress-linear>
-      </v-card-subtitle>
+      </v-card-subtitle> -->
 
       <v-container>
         <v-row>
@@ -88,6 +88,7 @@
                       color="secondary"
                       height="50"
                       class="ml-1"
+                      @click="downloadFile(download)"
                     >
                       Скачать
                     </v-btn>
@@ -97,7 +98,7 @@
                       color="red-lighten-1"
                       class="ml-1"
                       height="50"
-                      @click="deleteFile(index)"
+                      @click="deleteFile(download.id)"
                     >
                       Удалить
                     </v-btn>
@@ -118,7 +119,7 @@ import { ref } from 'vue';
 import { VFileUpload } from 'vuetify/labs/VFileUpload'
 
 interface FileItem {
-  id: number,
+  id: string,
   filename: string,
   size: number
 }
@@ -161,7 +162,6 @@ const refreshListOfFiles = async () => {
 }
 
 const uploadFiles = async () => {
-
   const items_count = uploads.value.length;
   for (let i = 0; i < items_count; i++) {
     const form = new FormData();
@@ -187,9 +187,31 @@ const uploadFiles = async () => {
   refreshListOfFiles();
 }
 
-const deleteFile = async (index: number) => {
-  await axios.delete('storage/'+downloads.value[index].id);
+const deleteFile = async (file_id: string) => {
+  await axios.delete(`storage/${file_id}`);
   refreshListOfFiles();
+}
+
+const downloadFile = async (file: FileItem) => {
+  await axios.get(`storage/download/${file.id}`, {
+    responseType: 'blob',
+    onDownloadProgress: (itemDownload) => {
+      if (file.size > 0) {
+        let progress = (itemDownload.loaded / file.size);
+        progress = Math.round(progress * 100);
+        fileProgress.value = progress;
+      }
+    },
+  }).then(response => {
+    const url = window.URL.createObjectURL(response.data);
+    const a = document.createElement('a');
+    a.href = url
+    a.download = file.filename;
+    a.click();
+    setTimeout(() => window.URL.revokeObjectURL(url), 0);
+  });
+
+  fileProgress.value = 0;
 }
 
 onMounted(() => {
