@@ -6,6 +6,8 @@ export interface File {
   filename: string,
   size: number,
   sizeString: string,
+  isImage: boolean,
+  url: string,
 }
 
 const fileSizeToString = (size: number) => {
@@ -25,6 +27,13 @@ const fileSizeToString = (size: number) => {
   return Math.round(size * 100) / 100 + 'GB';
 }
 
+const fileIsImage = (filename: string) => {
+  const imageExtensions = [".jpg", ".png", ".gif", ".jpeg"];
+  const lastDot = filename.lastIndexOf(".");
+  const extension = filename.substring(lastDot);
+  return imageExtensions.includes(extension.toLowerCase());
+}
+
 export const storageStore = defineStore('storage', {
 
   getters: {
@@ -32,12 +41,16 @@ export const storageStore = defineStore('storage', {
       const files_list: File[] = [];
       await axios.get('storage/list').then(response => {
         for (let i = 0; i < response.data.length; i++) {
-          files_list.push(<File>{
+          const file = <File>{
             id: response.data[i].storage_id,
             filename: response.data[i].filename,
             size: response.data[i].size,
             sizeString: fileSizeToString(response.data[i].size),
-          });
+            isImage: fileIsImage(response.data[i].filename),
+            url: '',
+          }
+
+          files_list.push(file);
         }
       });
       return files_list;
@@ -83,6 +96,7 @@ export const storageStore = defineStore('storage', {
         },
       }).then(response => {
         url = window.URL.createObjectURL(response.data);
+        file.url = url;
       });
     
       if (on_progress) {

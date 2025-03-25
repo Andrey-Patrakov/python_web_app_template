@@ -74,9 +74,19 @@
                       disabled
                       width="100%"
                     >
-                      <v-container class="d-flex align-center text-body-2 py-1">
-                        <v-icon icon="mdi mdi-file-document" />
-                        <div class="ml-4 text">
+                      <v-container class="d-flex align-center text-body-2 py-2 px-3">
+                        <v-avatar rounded="0">
+                          <v-img
+                            v-if="file.isImage && file.url"
+                            :src="file.url"
+                            cover
+                          />
+                          <v-icon
+                            v-else
+                            icon="mdi mdi-file-document"
+                          />
+                        </v-avatar>
+                        <div class="ml-3 text">
                           {{ file.filename }} <br>
                           {{ file.sizeString }}
                         </div>
@@ -86,7 +96,7 @@
                     <v-btn
                       variant="outlined"
                       color="secondary"
-                      height="50"
+                      height="56"
                       class="ml-1"
                       @click="downloadFile(file)"
                     >
@@ -97,7 +107,7 @@
                       variant="outlined"
                       color="red-lighten-1"
                       class="ml-1"
-                      height="50"
+                      height="56"
                       @click="deleteFile(file)"
                     >
                       Удалить
@@ -129,6 +139,11 @@ const onProgress = (value: number) => {
 
 const refreshList = async () => {
   files_list.value = await storage.getUserFiles;
+  files_list.value.forEach(file => {
+    if (file.isImage) {
+      storage.getLink(file);
+    }
+  });
 }
 
 const uploadFiles = async () => {
