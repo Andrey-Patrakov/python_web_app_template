@@ -102,9 +102,9 @@ interface IUserForm {
 }
 
 const userForm = ref<IUserForm>({
-    email: '',
-    username: '',
-    password: '',
+  email: '',
+  username: '',
+  password: '',
 });
 
 const submit = async () => {

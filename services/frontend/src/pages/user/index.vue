@@ -74,6 +74,7 @@
               block
               variant="elevated"
               height="55"
+              @click="showDialog = true"
             >
               Смена пароля
             </v-btn>
@@ -116,10 +117,14 @@
         </v-btn>
       </v-card-actions>
     </v-form>
+
+    <change-pwd-dialog v-model="showDialog" />
   </v-card>
 </template>
 
 <script lang="ts" setup>
+import changePwdDialog from './$dialogs/ChangePwdDialog.vue';
+
 import { ref } from 'vue';
 import { userStore, type UpdateInfoInterface } from '@/stores/user';
 import rules from '@/rules';
@@ -128,6 +133,7 @@ const avatar = '';
 const user = userStore();
 const $rules = rules();
 const isValid = ref<boolean>(false);
+const showDialog = ref<boolean>(false);
 const errorMessage = ref<string>('');
 
 interface IUserForm {

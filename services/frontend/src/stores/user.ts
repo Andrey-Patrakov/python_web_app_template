@@ -44,6 +44,11 @@ export const userStore = defineStore('user', {
       return null;
     },
 
+    async changePassword(pwdForm: object) {
+      await axios.post('/auth/change_pwd', pwdForm);
+      return null;
+    },
+
     async viewMe() {
       try {
         await axios.get('/auth/me').then((res) => {
