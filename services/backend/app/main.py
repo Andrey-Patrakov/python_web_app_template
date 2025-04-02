@@ -3,7 +3,7 @@ from app.lifespan import lifespan
 
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.users import router as users_router
+from app.user import router as user_router
 from app.storage import router as storage_router
 
 # uvicorn app.main:app --reload
@@ -22,7 +22,7 @@ def home_page():
     return {'message': 'Привет мир!'}
 
 
-app.include_router(users_router)
+app.include_router(user_router)
 app.include_router(storage_router)
 
 

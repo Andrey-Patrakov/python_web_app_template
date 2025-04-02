@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
-from ..user.dao import UsersDAO
+from .user.dao import UsersDAO
 
-from ..user.models import User
-from ..user.schemas import UserRegisterSchema, UserAuthSchema, UserSchema
-from ..user.schemas import UserUpdateInfoSchema
-from .auth import get_password_hash, authenticate_user
-from .auth import get_current_user, logout_current_user
-from .tokens import create_access_token, create_refresh_token
-from .tokens import ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, TOKEN_MAX_AGE
+from .user.models import User
+from .user.schemas import UserRegisterSchema, UserAuthSchema, UserSchema
+from .user.schemas import UserUpdateInfoSchema
+from .auth.auth import get_password_hash, authenticate_user
+from .auth.auth import get_current_user, logout_current_user
+from .auth.tokens import create_access_token, create_refresh_token
+from .auth.tokens import ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, TOKEN_MAX_AGE
 
-router = APIRouter(prefix='/auth', tags=['Авторизация и аутентификация'])
+router = APIRouter(prefix='/user', tags=['Авторизация и аутентификация'])
 
 
 @router.post('/register')

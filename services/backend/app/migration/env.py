@@ -15,8 +15,8 @@ sys.path.insert(0, dirname(dirname(abspath(__file__))))
 from app.database.session import DATABASE_URL # noqa
 from app.database.models import Base # noqa
 
-from app.users import User # noqa
-from app.users import BlacklistedToken # noqa
+from app.user import User # noqa
+from app.user import BlacklistedToken # noqa
 from app.storage import File # noqa
 
 # this is the Alembic Config object, which provides

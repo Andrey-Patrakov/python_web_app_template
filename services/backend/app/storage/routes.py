@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 from .storage import Storage
 from .dao import FileDAO
 from .schemas import FileSchema
-from app.users import get_current_user
+from app.user import get_current_user
 
 
 router = APIRouter(prefix='/storage', tags=['Файловое хранилище'])
