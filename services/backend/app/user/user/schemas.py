@@ -28,3 +28,8 @@ class UserUpdateInfoSchema(BaseModel):
     email: EmailStr = Field(..., description='Email пользователя')
     username: str = Field(..., description='Логин пользователя')
     description: str | None = Field(..., max_length=1000, description="Описание пользователя") # noqa
+
+
+class UserChangePwdSchema(BaseModel):
+    old_password: str = Field(..., min_length=5, max_length=50, description='Старый пароль') # noqa
+    new_password: str = Field(..., min_length=5, max_length=50, description='Новый пароль') # noqa

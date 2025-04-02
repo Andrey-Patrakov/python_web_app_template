@@ -43,7 +43,7 @@
               <v-text-field
                 v-model="pwdForm.new_password"
                 label="Новый пароль"
-                :rules="[$rules.requred, $rules.password]"
+                :rules="[$rules.requred, $rules.password, equalPasswords(pwdForm.old_password)]"
                 type="password"
                 @input="password2=''"
               />
@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import rules from '@/rules';
-import { userStore } from '@/stores/user';
+import { type PwdChangeInterface, userStore } from '@/stores/user';
 const $rules = rules();
 
 const showDialog = defineModel<boolean>();
@@ -104,15 +104,16 @@ const isValid = ref<boolean>(false);
 const errorMessage = ref<string>('');
 const password2 = ref<string>('');
 
-interface pwdFormInterface{
-  old_password: string,
-  new_password: string,
-}
-
-const pwdForm = ref<pwdFormInterface>({
+const pwdForm = ref<PwdChangeInterface>({
   old_password: '',
   new_password: '',
 });
+
+const equalPasswords = (old_pwd: string) => {
+  return (new_pwd: string): boolean | string => {
+    return !old_pwd || !new_pwd || old_pwd != new_pwd || 'Новый пароль не должен совпадать со старым!';
+  }
+}
 
 const clear = () => {
   pwdForm.value.old_password = '';
@@ -128,6 +129,7 @@ const submit = async () => {
   else {
     try {
       await user.changePassword(pwdForm.value);
+      close();
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       if (typeof error?.response?.data?.detail == 'string') {
         errorMessage.value = error.response.data.detail;
@@ -139,8 +141,8 @@ const submit = async () => {
 };
 
 const close = () => {
-  clear();
   showDialog.value = false;
+  clear();
 };
 
 const user = userStore();

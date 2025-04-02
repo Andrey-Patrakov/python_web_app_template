@@ -64,7 +64,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { userStore } from '@/stores/user';
+import { userStore, type LoginInterface } from '@/stores/user';
 import router from '@/router';
 import rules from '@/rules';
 
@@ -72,12 +72,7 @@ const $rules = rules();
 const isValid = ref<boolean>(false);
 const errorMessage = ref<string>('');
 
-interface LoginForm {
-  email: string,
-  password: string
-}
-
-const userForm = ref<LoginForm>({
+const userForm = ref<LoginInterface>({
   email: '',
   password: '',
 });

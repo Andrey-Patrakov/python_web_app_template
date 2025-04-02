@@ -87,7 +87,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import router from '@/router';
-import { userStore } from '@/stores/user';
+import { userStore, type RegisterInterface } from '@/stores/user';
 import rules from '@/rules';
 
 const $rules = rules();
@@ -95,13 +95,7 @@ const isValid = ref<boolean>(false);
 const errorMessage = ref<string>('');
 const password2 = ref<string>('');
 
-interface IUserForm {
-  email: string,
-  username: string,
-  password: string,
-}
-
-const userForm = ref<IUserForm>({
+const userForm = ref<RegisterInterface>({
   email: '',
   username: '',
   password: '',

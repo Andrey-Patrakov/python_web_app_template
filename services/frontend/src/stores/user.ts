@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios';
 
-interface UserState {
+export interface UserState {
   email: string | null;
   username: string | null;
   description: string | null;
@@ -10,10 +10,26 @@ interface UserState {
   isAuthenticated:  boolean;
 }
 
+export interface RegisterInterface {
+  email: string,
+  username: string,
+  password: string,
+}
+
+export interface LoginInterface {
+  email: string,
+  password: string,
+}
+
 export interface UpdateInfoInterface {
-  email: string | null;
-  username: string | null;
-  description: string | null;
+  email: string | null,
+  username: string | null,
+  description: string | null,
+}
+
+export interface PwdChangeInterface {
+  old_password: string,
+  new_password: string,
 }
 
 export const userStore = defineStore('user', {
@@ -26,27 +42,23 @@ export const userStore = defineStore('user', {
   }),
 
   actions: {
-    async register(user: object) {
-      await axios.post('/user/register', user);
-      return user;
+    async register(registerForm: RegisterInterface) {
+      await axios.post('/user/register', registerForm);
     },
 
-    async login(user: object) {
-      await axios.post('/user/login', user).then(async () => {
+    async login(loginForm: LoginInterface) {
+      await axios.post('/user/login', loginForm).then(async () => {
         await this.viewMe();
       });
-      return user;
     },
 
     async logout() {
       await axios.post('/user/logout');
       this.clear();
-      return null;
     },
 
-    async changePassword(pwdForm: object) {
+    async changePassword(pwdForm: PwdChangeInterface) {
       await axios.post('/user/change_pwd', pwdForm);
-      return null;
     },
 
     async viewMe() {
@@ -58,7 +70,6 @@ export const userStore = defineStore('user', {
           this.isAuthenticated = true;
           this.created_at = new Date(res.data.created_at);
         });
-        return null;
       } catch(error) {
         this.clear();
         throw error;

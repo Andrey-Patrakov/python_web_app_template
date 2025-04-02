@@ -3,9 +3,10 @@ from .user.dao import UsersDAO
 
 from .user.models import User
 from .user.schemas import UserRegisterSchema, UserAuthSchema, UserSchema
-from .user.schemas import UserUpdateInfoSchema
+from .user.schemas import UserUpdateInfoSchema, UserChangePwdSchema
 from .auth.auth import get_password_hash, authenticate_user
 from .auth.auth import get_current_user, logout_current_user
+from .auth.auth import verify_password
 from .auth.tokens import create_access_token, create_refresh_token
 from .auth.tokens import ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, TOKEN_MAX_AGE
 
@@ -74,4 +75,23 @@ async def update_user_info(
         user: User = Depends(get_current_user)) -> dict:
     info_dict = info.model_dump()
     await UsersDAO.update(filter_by={"id": user.id}, **info_dict)
+    return {'message': 'Данные обновлены успешно!'}
+
+
+@router.post('/change_pwd')
+async def change_pwd(
+        pwd_form: UserChangePwdSchema,
+        user: User = Depends(get_current_user)) -> dict:
+
+    if not verify_password(
+            plain_password=pwd_form.old_password,
+            hashed_password=user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Неверный пароль!')
+
+    await UsersDAO.update(
+        filter_by={"id": user.id},
+        password=get_password_hash(pwd_form.new_password))
+
     return {'message': 'Данные обновлены успешно!'}
