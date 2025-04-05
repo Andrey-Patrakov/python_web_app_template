@@ -74,6 +74,9 @@ async def update_user_info(
         info: UserUpdateInfoSchema,
         user: User = Depends(get_current_user)) -> dict:
     info_dict = info.model_dump()
+    if info.email != user.email:
+        info_dict["is_verified"] = False
+
     await UsersDAO.update(filter_by={"id": user.id}, **info_dict)
     return {'message': 'Данные обновлены успешно!'}
 
@@ -92,8 +95,7 @@ async def change_pwd(
 
     await UsersDAO.update(
         filter_by={"id": user.id},
-        password=get_password_hash(pwd_form.new_password),
-        is_verified=False)
+        password=get_password_hash(pwd_form.new_password))
 
     return {'message': 'Данные обновлены успешно!'}
 
