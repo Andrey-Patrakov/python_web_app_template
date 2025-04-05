@@ -20,11 +20,22 @@ class SettingsStorage(BaseSettings):
     SECRET_KEY: str
 
 
+class SettingsSMTP(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix='SMTP_')
+
+    HOST: str
+    PORT: int
+    USER: str
+    PASSWORD: str
+    SSL_REQUIRED: bool
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict()
 
     db: SettingsDB = SettingsDB()
     storage: SettingsStorage = SettingsStorage()
+    smtp: SettingsSMTP = SettingsSMTP()
 
     REGION_NAME: str = 'ru-moscow'
     SECRET_KEY: str

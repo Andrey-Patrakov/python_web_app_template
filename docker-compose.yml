@@ -22,6 +22,12 @@ services:
       - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER}
       - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD}
       - STORAGE_BUCKET=${MINIO_BUCKET_NAME}
+
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_SSL_REQUIRED=${SMTP_SSL_REQUIRED}
     volumes:
       - ./services/backend:/app
     command: >
