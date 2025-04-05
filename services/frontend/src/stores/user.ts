@@ -3,11 +3,12 @@ import { defineStore } from 'pinia'
 import axios from 'axios';
 
 export interface UserState {
-  email: string | null;
-  username: string | null;
-  description: string | null;
-  created_at: Date | null;
-  isAuthenticated:  boolean;
+  email: string | null,
+  username: string | null,
+  description: string | null,
+  created_at: Date | null,
+  is_verified: boolean,
+  isAuthenticated: boolean,
 }
 
 export interface RegisterInterface {
@@ -38,6 +39,7 @@ export const userStore = defineStore('user', {
     username: null,
     description: null,
     created_at: null,
+    is_verified: false,
     isAuthenticated: false,
   }),
 
@@ -67,6 +69,7 @@ export const userStore = defineStore('user', {
           this.email = res.data.email;
           this.username = res.data.username;
           this.description = res.data.description || '';
+          this.is_verified = res.data.is_verified;
           this.isAuthenticated = true;
           this.created_at = new Date(res.data.created_at);
         });
@@ -80,6 +83,14 @@ export const userStore = defineStore('user', {
       await axios.post('/user/upd_info', user).then(async () => {
         await this.viewMe();
       });
+    },
+
+    async verifyEmail() {
+      let message = '';
+      await axios.post('/user/verify_email').then((res) => {
+        message = res.data.message;
+      });
+      return message;
     },
 
     clear() {

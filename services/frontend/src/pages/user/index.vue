@@ -7,6 +7,10 @@
       Пользователь: {{ user.username }}
     </v-card-title>
 
+    <v-card-subtitle v-if="!user.is_verified" class="text-red">
+      Внимание: E-mail пользователя не подтвержден!
+    </v-card-subtitle>
+
     <v-divider />
 
     <v-form
@@ -33,7 +37,10 @@
                   v-model="userForm.email"
                   variant="outlined"
                   label="E-mail"
+                  :prepend-inner-icon="user.is_verified ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline'"
+                  :append-inner-icon="user.is_verified || hideVerifyButton || isChanged ? '' : 'mdi-send'"
                   :rules="[$rules.requred, $rules.email]"
+                  @click:append-inner="verifyEmail"
                 />
               </v-col>
             </v-row>
@@ -119,6 +126,17 @@
     </v-form>
 
     <change-pwd-dialog v-model="showDialog" />
+
+    <v-bottom-sheet v-model="showBottomSheet">
+      <v-card
+        height="200"
+        class="text-center"
+      >
+        <v-card-text>
+          {{ infoMessage }}
+        </v-card-text>
+      </v-card>
+    </v-bottom-sheet>
   </v-card>
 </template>
 
@@ -135,6 +153,9 @@ const $rules = rules();
 const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
 const errorMessage = ref<string>('');
+const infoMessage = ref<string>('');
+const showBottomSheet = ref<boolean>(false);
+const hideVerifyButton = ref<boolean>(false);
 
 interface IUserForm {
   email: string,
@@ -160,6 +181,12 @@ const submit = async () => {
     user.updateInfo(info);
   }
 };
+
+const verifyEmail = async () => {
+  infoMessage.value = await user.verifyEmail();
+  showBottomSheet.value = true;
+  hideVerifyButton.value = true;
+}
 
 const isChanged = computed(() => {
   return (

@@ -20,7 +20,7 @@ class UserSchema(BaseModel):
     email: EmailStr = Field(..., description='Email пользователя')
     username: str = Field(..., description='Логин пользователя')
     description: str | None = Field(..., description="Описание пользователя")
-    is_active: bool = Field(..., description='Активен ли пользователь')
+    is_verified: bool = Field(..., description='Подтверждена ли почта')
     created_at: datetime = Field(..., description='Дата создания пользователя')
 
 

@@ -92,6 +92,16 @@ async def change_pwd(
 
     await UsersDAO.update(
         filter_by={"id": user.id},
-        password=get_password_hash(pwd_form.new_password))
+        password=get_password_hash(pwd_form.new_password),
+        is_verified=False)
 
     return {'message': 'Данные обновлены успешно!'}
+
+
+@router.post('/verify_email')
+async def verify_email(
+        user: User = Depends(get_current_user)) -> dict:
+
+    # TODO
+    return {
+        'message': 'Письмо отправлено на указанный адрес электронной почты!'}
