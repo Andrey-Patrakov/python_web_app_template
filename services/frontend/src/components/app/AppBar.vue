@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
     app
-    color="green"
+    color="app-primary"
     height="65"
   >
     <v-card
@@ -12,7 +12,7 @@
       <div class="text-body-1 font-weight-medium pa-1 mr-3">
         {{ username }}
       </div>
-      <v-avatar color="green">
+      <v-avatar color="app-primary">
         <img
           v-if="avatar"
           :src="avatar"

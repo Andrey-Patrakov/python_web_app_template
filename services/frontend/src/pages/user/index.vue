@@ -5,11 +5,13 @@
   >
     <v-card-title>
       Пользователь: {{ user.username }}
+      <v-card-subtitle
+        v-if="!user.is_verified"
+        class="text-red pl-0"
+      >
+        Внимание: E-mail пользователя не подтвержден!
+      </v-card-subtitle>
     </v-card-title>
-
-    <v-card-subtitle v-if="!user.is_verified" class="text-red">
-      Внимание: E-mail пользователя не подтвержден!
-    </v-card-subtitle>
 
     <v-divider />
 
@@ -47,7 +49,7 @@
           </v-col>
           <v-col class="text-center align-content-center">
             <v-avatar
-              color="green"
+              color="app-primary"
               size="120"
             >
               <img
@@ -117,7 +119,7 @@
           variant="elevated"
           size="large"
           class="ml-auto"
-          :color="!isChanged || !isValid ? 'gray-lighten-1' : 'green-lighten-1'"
+          :color="!isChanged || !isValid ? 'gray-lighten-1' : 'app-primary'"
           :disabled="!isChanged || !isValid"
         >
           Сохранить

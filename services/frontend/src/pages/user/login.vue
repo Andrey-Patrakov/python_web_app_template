@@ -43,7 +43,7 @@
       <v-card-actions>
         <v-btn
           size="large"
-          color="green-lighten-1"
+          color="app-primary"
           class="ml-auto"
           @click="clear"
         >
@@ -53,7 +53,7 @@
           type="submit"
           variant="elevated"
           size="large"
-          color="green-lighten-1"
+          color="app-primary"
         >
           Подтвердить
         </v-btn>

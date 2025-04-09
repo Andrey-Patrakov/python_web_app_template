@@ -15,5 +15,12 @@ import { createVuetify } from 'vuetify'
 export default createVuetify({
   theme: {
     defaultTheme: 'light',
+    themes: {
+      light: {
+        colors: {
+          'app-primary': '#00b559',
+        },
+      },
+    },
   },
 })
