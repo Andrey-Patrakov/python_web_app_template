@@ -25,5 +25,6 @@ declare module 'vue-router/auto-routes' {
     '/user/$dialogs/ChangePwdDialog': RouteRecordInfo<'/user/$dialogs/ChangePwdDialog', '/user/$dialogs/ChangePwdDialog', Record<never, never>, Record<never, never>>,
     '/user/login': RouteRecordInfo<'/user/login', '/user/login', Record<never, never>, Record<never, never>>,
     '/user/register': RouteRecordInfo<'/user/register', '/user/register', Record<never, never>, Record<never, never>>,
+    '/user/verification': RouteRecordInfo<'/user/verification', '/user/verification', Record<never, never>, Record<never, never>>,
   }
 }

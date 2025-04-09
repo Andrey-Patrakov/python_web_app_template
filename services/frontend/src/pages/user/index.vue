@@ -40,7 +40,7 @@
                   variant="outlined"
                   label="E-mail"
                   :prepend-inner-icon="user.is_verified ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline'"
-                  :append-inner-icon="user.is_verified || hideVerifyButton || isChanged ? '' : 'mdi-send'"
+                  :append-inner-icon="user.is_verified || isChanged ? '' : 'mdi-send'"
                   :rules="[$rules.requred, $rules.email]"
                   @click:append-inner="verifyEmail"
                 />
@@ -128,17 +128,6 @@
     </v-form>
 
     <change-pwd-dialog v-model="showDialog" />
-
-    <v-bottom-sheet v-model="showBottomSheet">
-      <v-card
-        height="200"
-        class="text-center"
-      >
-        <v-card-text>
-          {{ infoMessage }}
-        </v-card-text>
-      </v-card>
-    </v-bottom-sheet>
   </v-card>
 </template>
 
@@ -148,6 +137,7 @@ import changePwdDialog from './$dialogs/ChangePwdDialog.vue';
 import { ref } from 'vue';
 import { userStore, type UpdateInfoInterface } from '@/stores/user';
 import rules from '@/rules';
+import router from '@/router';
 
 const avatar = '';
 const user = userStore();
@@ -156,8 +146,6 @@ const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
 const errorMessage = ref<string>('');
 const infoMessage = ref<string>('');
-const showBottomSheet = ref<boolean>(false);
-const hideVerifyButton = ref<boolean>(false);
 
 interface IUserForm {
   email: string,
@@ -186,8 +174,7 @@ const submit = async () => {
 
 const verifyEmail = async () => {
   infoMessage.value = await user.verifyEmail();
-  showBottomSheet.value = true;
-  hideVerifyButton.value = true;
+  router.push('/user/verification');
 }
 
 const isChanged = computed(() => {
@@ -196,6 +183,10 @@ const isChanged = computed(() => {
     userForm.value.username.trim() != user.username ||
     userForm.value.description.trim() != user.description
   );
+})
+
+onMounted(async() => {
+  await user.viewMe();
 })
 
 </script>
