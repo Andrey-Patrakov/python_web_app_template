@@ -17,6 +17,7 @@ from app.database.models import Base # noqa
 
 from app.user import User # noqa
 from app.user import BlacklistedToken # noqa
+from app.user import Token # noqa
 from app.storage import File # noqa
 
 # this is the Alembic Config object, which provides

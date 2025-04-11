@@ -41,8 +41,10 @@ const checkVerification = async () => {
   return user.is_verified;
 }
 
-onMounted(async () => {
-  const interval = setInterval(async () => {
+let interval: number | undefined;
+
+onMounted(async () => {  
+  interval = setInterval(async () => {
     if (await checkVerification()) {
       clearInterval(interval);
       setTimeout(() => {
@@ -50,6 +52,12 @@ onMounted(async () => {
       }, 1500);
     }
   }, 5000);
+});
+
+onUnmounted(() => {
+  if (interval) {
+    clearInterval(interval);
+  }
 });
 
 const user = userStore();

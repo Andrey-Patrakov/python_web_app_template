@@ -63,14 +63,19 @@ class BaseDAO:
                 return result.rowcount
 
     @classmethod
-    async def delete(cls, delete_all: bool = False, **filter_by):
-        if not delete_all and not filter_by:
+    async def delete(cls, delete_all: bool = False, where=None, **filter_by):
+        if not delete_all and not filter_by and where is None:
             raise ValueError(
                 'Необходимо указать хотя бы один параметр для удаления')
 
         async with Session() as session:
             async with session.begin():
-                query = delete(cls.model).filter_by(**filter_by)
+                query = delete(cls.model)
+
+                if where is not None:
+                    query = query.where(where)
+
+                query = query.filter_by(**filter_by)
                 result = await session.execute(query)
                 try:
                     await session.commit()

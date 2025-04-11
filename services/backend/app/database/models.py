@@ -13,6 +13,7 @@ str_null = Annotated[str, mapped_column(nullable=True)]
 bool_true = Annotated[bool, mapped_column(server_default=true())]
 bool_false = Annotated[bool, mapped_column(server_default=false())]
 created_at = Annotated[datetime, mapped_column(server_default=func.now())]
+datetime_null = Annotated[datetime, mapped_column(nullable=True)]
 
 
 # alembic init -t async migration -- Инициализация alembic
