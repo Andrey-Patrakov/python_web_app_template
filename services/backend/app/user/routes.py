@@ -8,6 +8,8 @@ from .user import UserUpdateInfoSchema, UserChangePwdSchema
 from .auth import get_current_user
 from .auth import get_password_hash, verify_password
 from .auth import register_user, authenticate_user, logout_user
+from .email_verification import get_verification_url, verify_email
+from .token import EmailVerificationSchema
 
 router = APIRouter(prefix='/user', tags=['Авторизация и аутентификация'])
 
@@ -69,10 +71,18 @@ async def change_pwd(
     return {'message': 'Данные обновлены успешно!'}
 
 
-@router.post('/verify_email')
-async def verify_email(
+@router.post('/send_message')
+async def send_message(
         user: User = Depends(get_current_user)) -> dict:
 
-    # TODO
+    print(await get_verification_url(user.id))
+
     return {
         'message': 'Письмо отправлено на указанный адрес электронной почты!'}
+
+
+@router.post('/verify_email')
+async def verify(params: EmailVerificationSchema):
+    await verify_email(params.token)
+    return {
+        'message': 'Подтверждение электронной почты завершено успешно!'}

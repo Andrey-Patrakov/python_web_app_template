@@ -85,9 +85,17 @@ export const userStore = defineStore('user', {
       });
     },
 
-    async verifyEmail() {
+    async sendMessage() {
       let message = '';
-      await axios.post('/user/verify_email').then((res) => {
+      await axios.post('/user/send_message').then((res) => {
+        message = res.data.message;
+      });
+      return message;
+    },
+
+    async verifyEmail(token: string) {
+      let message = '';
+      await axios.post('/user/verify_email', {token}).then((res) => {
         message = res.data.message;
       });
       return message;

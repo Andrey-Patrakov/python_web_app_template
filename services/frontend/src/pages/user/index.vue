@@ -173,8 +173,8 @@ const submit = async () => {
 };
 
 const verifyEmail = async () => {
-  infoMessage.value = await user.verifyEmail();
-  router.push('/user/verification');
+  infoMessage.value = await user.sendMessage();
+  router.push('/user/verify');
 }
 
 const isChanged = computed(() => {

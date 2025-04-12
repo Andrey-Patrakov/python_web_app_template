@@ -2,7 +2,8 @@ from .jwt_token import JWT_Token
 from .jwt_token import TokenInvalidError
 from .jwt_token import TokenNotFoundError
 from .jwt_token import TokenBlacklistedError
-from .token import Token, BlacklistedToken
+from .token import Token, BlacklistedToken, VerificationToken
+from .schemas import EmailVerificationSchema
 
 __all__ = [
     JWT_Token,
@@ -10,5 +11,7 @@ __all__ = [
     TokenNotFoundError,
     TokenBlacklistedError,
     BlacklistedToken,
-    Token
+    VerificationToken,
+    Token,
+    EmailVerificationSchema
 ]

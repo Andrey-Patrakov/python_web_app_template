@@ -6,6 +6,7 @@ from .dao import TokenDAO
 
 BASE_TOKEN = 0
 BLACKLISTED_TOKEN = 1
+VERIFICATION_TOKEN = 2
 
 
 class Token:
@@ -52,6 +53,14 @@ class Token:
         return await TokenDAO.delete(
             where=(TokenModel.expires_at < now), **flt)
 
+    @classmethod
+    async def delete(cls, token: str) -> int:
+        return await TokenDAO.delete(token=token)
+
 
 class BlacklistedToken(Token):
     TOKEN_TYPE = BLACKLISTED_TOKEN
+
+
+class VerificationToken(Token):
+    TOKEN_TYPE = VERIFICATION_TOKEN

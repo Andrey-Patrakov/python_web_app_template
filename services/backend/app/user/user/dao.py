@@ -27,3 +27,7 @@ class UserDAO(BaseDAO):
 
             result = await session.execute(query)
             return result.scalar_one_or_none()
+
+    @classmethod
+    async def verify_email(cls, user_id: int):
+        return await cls.update(filter_by={'id': user_id}, is_verified=True)
