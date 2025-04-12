@@ -3,7 +3,7 @@ from sqlalchemy import select, or_
 from app.database import Session, BaseDAO
 
 
-class UsersDAO(BaseDAO):
+class UserDAO(BaseDAO):
     model = User
 
     @classmethod
