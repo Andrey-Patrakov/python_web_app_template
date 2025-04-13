@@ -8,8 +8,10 @@ from .user import UserUpdateInfoSchema, UserChangePwdSchema
 from .auth import get_current_user
 from .auth import get_password_hash, verify_password
 from .auth import register_user, authenticate_user, logout_user
-from .email_verification import get_verification_url, verify_email
+from .email_verification import get_verification_url, create_message
+from .email_verification import verify_email
 from .token import EmailVerificationSchema
+from app.mail import SMTP_Mail
 
 router = APIRouter(prefix='/user', tags=['Авторизация и аутентификация'])
 
@@ -72,10 +74,14 @@ async def change_pwd(
 
 
 @router.post('/send_message')
-async def send_message(
-        user: User = Depends(get_current_user)) -> dict:
+async def send_message(user: User = Depends(get_current_user)) -> dict:
+    link, sitename = await get_verification_url(user.id)
+    with SMTP_Mail() as mail:
+        message = mail.message(
+            user.email, 'Для завершения регистрации подтвердите свой email')
 
-    print(await get_verification_url(user.id))
+        message.attach_html(create_message(link, sitename))
+        message.send()
 
     return {
         'message': 'Письмо отправлено на указанный адрес электронной почты!'}

@@ -1,0 +1,67 @@
+
+<div align="center" style="font-family: Arial, sans-serif; margin: 15px;">
+  <table
+    width="600px"
+    style="
+      background-color: ghostwhite;
+      padding: 0px 10px;
+      border-radius: 5px;
+      box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      border-spacing: 0px 18px;
+    "
+  >
+    <tr>
+      <td>
+        <span style="font-size: 24pt; font-weight: 600;">
+          {{ sitename }}
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span style="font-size: 16pt;">
+          Здравствуйте!
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span style="font-size: 12pt;">
+          Вы указали этот адрес электронной почты в качестве в качестве логина.
+          Для подтверждения нажмите кнопку ниже.
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a
+          href="{{ link }}"
+          style="
+            display: block;
+            background-color: #00b559;
+            color: white;
+            font-size: 18pt;
+            padding: 10px;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+          "
+        >
+          Подтвердить email
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size: 10pt;">
+        Если вы не регистрировались на {{ sitename }} и получили это письмо случайно, то просто проигнорируйте его.
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size: 10pt; color: grey;">
+        Это письмо сформировано автоматически. Пожалуйста, не отвечайте на него.
+      </td>
+    </tr>
+  </table>
+</div>

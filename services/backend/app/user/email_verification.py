@@ -1,4 +1,6 @@
 from fastapi import HTTPException, status
+from pathlib import Path
+from jinja2 import Environment, FileSystemLoader
 from datetime import datetime, timedelta
 from urllib.parse import urlparse, urlencode, urlunsplit
 
@@ -13,11 +15,18 @@ async def get_verification_url(user_id: int):
 
     frontend_url = urlparse(settings.FRONTEND_URL)
     path = 'user/verify'
-    result = urlunsplit((
+    link = urlunsplit((
         frontend_url.scheme, frontend_url.netloc, path,
         urlencode({'token': token}), ''))
 
-    return result
+    return link, frontend_url.netloc
+
+
+def create_message(link, sitename):
+    path = Path(__file__).parent / 'templates'
+    environment = Environment(loader=FileSystemLoader(path))
+    template = environment.get_template('email_verification.html')
+    return template.render(sitename=sitename, link=link)
 
 
 async def verify_email(token: str):
