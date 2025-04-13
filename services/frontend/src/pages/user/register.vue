@@ -1,87 +1,89 @@
 <template>
-  <v-form
-    v-model="isValid"
-    @submit.prevent="submit"
-  >
-    <v-card
-      title="Регистрация"
-      class="mt-5 mx-auto"
-      width="450"
+  <v-container>
+    <v-form
+      v-model="isValid"
+      @submit.prevent="submit"
     >
-      <v-card-text>
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="userForm.username"
-              label="Имя пользователя"
-              :rules="[$rules.requred, $rules.username]"
-            />
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="userForm.email"
-              label="E-mail"
-              :rules="[$rules.requred, $rules.email]"
-            />
-          </v-col>
-        </v-row>
-        
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="userForm.password"
-              label="Пароль"
-              :rules="[$rules.requred, $rules.password]"
-              type="password"
-              @input="password2=''"
-            />
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="password2"
-              label="Повторите пароль"
-              :rules="[$rules.requred, $rules.passwordRepeat(userForm.password)]"
-              type="password"
-            />
-          </v-col>
-        </v-row>
-
-        <v-row v-if="errorMessage">
-          <v-col>
-            <div class="text-red-darken-4 text-body-2">
-              Ошибка: {{ errorMessage }}
-            </div>
-          </v-col>
-        </v-row>
-      </v-card-text>
-
-      <v-divider />
-      <v-card-actions>
-        <v-btn
-          size="large"
-          color="app-primary"
-          class="ml-auto"
-          @click="clear"
-        >
-          Очистить
-        </v-btn>
-        <v-btn
-          type="submit"
-          variant="elevated"
-          size="large"
-          color="app-primary"
-        >
-          Подтвердить
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-form>
+      <v-card
+        title="Регистрация"
+        class="mt-5 mx-auto"
+        max-width="450px"
+      >
+        <v-card-text>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="userForm.username"
+                label="Имя пользователя"
+                :rules="[$rules.requred, $rules.username]"
+              />
+            </v-col>
+          </v-row>
+  
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="userForm.email"
+                label="E-mail"
+                :rules="[$rules.requred, $rules.email]"
+              />
+            </v-col>
+          </v-row>
+          
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="userForm.password"
+                label="Пароль"
+                :rules="[$rules.requred, $rules.password]"
+                type="password"
+                @input="password2=''"
+              />
+            </v-col>
+          </v-row>
+  
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="password2"
+                label="Повторите пароль"
+                :rules="[$rules.requred, $rules.passwordRepeat(userForm.password)]"
+                type="password"
+              />
+            </v-col>
+          </v-row>
+  
+          <v-row v-if="errorMessage">
+            <v-col>
+              <div class="text-red-darken-4 text-body-2">
+                Ошибка: {{ errorMessage }}
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-text>
+  
+        <v-divider />
+        <v-card-actions>
+          <v-btn
+            size="large"
+            color="app-primary"
+            class="ml-auto"
+            @click="clear"
+          >
+            Очистить
+          </v-btn>
+          <v-btn
+            type="submit"
+            variant="elevated"
+            size="large"
+            color="app-primary"
+          >
+            Подтвердить
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-form>
+  </v-container>
 </template>
 
 <script lang="ts" setup>

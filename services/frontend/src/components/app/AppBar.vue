@@ -27,14 +27,29 @@
       </v-avatar>
     </v-card>
 
-    <v-menu
+    <v-overlay
+      v-if="vuetify.display.smAndDown.value"
+      v-model="showUserMenu"
       activator="#user-menu-activator"
-      transition="slide-x-transition"
-      offset="15px"
+      transition="slide-y-transition"
+      location-strategy="connected"
+      offset="10px"
+      width="100%"
     >
       <link-list
         :data="menu"
-        width="350px"
+      />
+    </v-overlay>
+    <v-menu
+      v-else
+      v-model="showUserMenu"
+      activator="#user-menu-activator"
+      transition="slide-x-transition"
+      offset="15px"
+      width="350px"
+    >
+      <link-list
+        :data="menu"
       />
     </v-menu>
   </v-app-bar>
@@ -45,7 +60,9 @@ import router from '@/router';
 import { userStore } from '@/stores/user';
 import LinkList from '@/components/LinkList/LinkList.vue';
 import type ListNodeInteface from '../LinkList/listNodeInterface';
+import vuetify from '@/plugins/vuetify';
 
+const showUserMenu = ref(false)
 const avatar = '';
 const username = computed(() => {
   return user.username ? user.username : 'Гость';
@@ -70,6 +87,10 @@ const menu = computed(() => {
     {icon: 'mdi-login', title: 'Вход', link: '/user/login'},
     {icon: 'mdi-account-plus', title: 'Регистрация', link: '/user/register'},
   ];
+});
+
+router.afterEach(() => {
+  showUserMenu.value = false;
 });
 
 onMounted(() => {
