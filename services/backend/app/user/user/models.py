@@ -12,3 +12,4 @@ class User(Base):
     description: Mapped[str_null]
     is_verified: Mapped[bool_false]
     created_at: Mapped[created_at]
+    avatar: Mapped[str_null]

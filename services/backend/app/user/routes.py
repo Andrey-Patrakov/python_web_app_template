@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import UploadFile, File
 
 from .user import User
 from .user import UserDAO
@@ -11,7 +12,9 @@ from .auth import register_user, authenticate_user, logout_user
 from .email_verification import get_verification_url, create_message
 from .email_verification import verify_email
 from .token import EmailVerificationSchema
+
 from app.mail import SMTP_Mail
+from app.storage import Storage
 
 router = APIRouter(prefix='/user', tags=['Авторизация и аутентификация'])
 
@@ -92,3 +95,18 @@ async def verify(params: EmailVerificationSchema):
     await verify_email(params.token)
     return {
         'message': 'Подтверждение электронной почты завершено успешно!'}
+
+
+@router.post('/change_avatar')
+async def change_avatar(
+        file: UploadFile = File(),
+        user: User = Depends(get_current_user)):
+
+    storage = Storage()
+    if user.avatar:
+        storage.delete(user.avatar)
+
+    storage_id = storage.upload(file=file.file, length=file.size)
+    await UserDAO.update(filter_by={'id': user.id}, avatar=storage_id)
+
+    return {'message': 'Аватар изменен успешно!'}

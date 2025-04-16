@@ -34,6 +34,31 @@ const fileIsImage = (filename: string) => {
   return imageExtensions.includes(extension.toLowerCase());
 }
 
+export const getFileLink = async (
+    storage_id: string,
+    file_size: number = 0,
+    on_progress: null | ((progress: number) => void) = null) => {
+
+  let url = '';
+  await axios.get(`storage/download/${storage_id}`, {
+    responseType: 'blob',
+    onDownloadProgress: (itemDownload) => {
+      if (on_progress && file_size > 0) {
+        let progress = (itemDownload.loaded / file_size);
+        progress = Math.round(progress * 100);
+        on_progress(progress);
+      }
+    },
+  }).then(response => {
+    url = window.URL.createObjectURL(response.data);
+  });
+
+  if (on_progress) {
+    on_progress(0);
+  }
+  return url;
+}
+
 export const storageStore = defineStore('storage', {
 
   getters: {
@@ -84,25 +109,7 @@ export const storageStore = defineStore('storage', {
     },
 
     async getLink(file: File, on_progress: null | ((progress: number) => void) = null) {
-      let url = '';
-      await axios.get(`storage/download/${file.id}`, {
-        responseType: 'blob',
-        onDownloadProgress: (itemDownload) => {
-          if (on_progress && file.size > 0) {
-            let progress = (itemDownload.loaded / file.size);
-            progress = Math.round(progress * 100);
-            on_progress(progress);
-          }
-        },
-      }).then(response => {
-        url = window.URL.createObjectURL(response.data);
-        file.url = url;
-      });
-    
-      if (on_progress) {
-        on_progress(0);
-      }
-      return url;
+      return await getFileLink(file.id, file.size, on_progress);
     },
 
     async download(file: File, on_progress: null | ((progress: number) => void) = null) {

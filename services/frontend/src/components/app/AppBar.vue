@@ -7,17 +7,20 @@
     <v-card
       id="user-menu-activator"
       max-width="350"
-      class="d-flex align-center justify-center ml-auto mr-3 px-3 py-2 text-body-2"
+      class="d-flex align-center justify-center ml-auto mr-3 px-3 py-1 text-body-2"
     >
       <div class="text-body-1 font-weight-medium pa-1 mr-3">
         {{ username }}
       </div>
-      <v-avatar color="app-primary">
-        <img
-          v-if="avatar"
-          :src="avatar"
-          alt=""
-        >
+      <v-avatar
+        size="45px"
+        color="app-primary"
+      >
+        <v-img
+          v-if="user.avatar"
+          :src="user.avatar"
+          alt="Avatar image"
+        />
         <v-icon
           v-else
           icon="mdi-account"
@@ -63,7 +66,6 @@ import type ListNodeInteface from '../LinkList/listNodeInterface';
 import vuetify from '@/plugins/vuetify';
 
 const showUserMenu = ref(false)
-const avatar = '';
 const username = computed(() => {
   return user.username ? user.username : 'Гость';
 });

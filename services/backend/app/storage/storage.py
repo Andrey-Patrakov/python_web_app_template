@@ -3,6 +3,7 @@ from typing import BinaryIO
 from minio import Minio
 from app.config import settings
 from math import ceil
+from uuid import uuid4
 
 
 class Storage:
@@ -18,8 +19,10 @@ class Storage:
         self.location = settings.REGION_NAME
         self.CHUNK_SIZE = 524288
 
-    def upload(self, name: str, file: BinaryIO, length: int):
-        return self.client.put_object(self.bucket, name, file, length=length)
+    def upload(self, file: BinaryIO, length: int):
+        storage_id = str(uuid4())
+        self.client.put_object(self.bucket, storage_id, file, length=length)
+        return storage_id
 
     def stats(self, name: str):
         return self.client.stat_object(self.bucket, name)

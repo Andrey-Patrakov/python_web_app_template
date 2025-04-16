@@ -3,8 +3,8 @@ from app.lifespan import lifespan
 
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.user import router as user_router
-from app.storage import router as storage_router
+from app.user.routes import router as user_router
+from app.storage.routes import router as storage_router
 
 # uvicorn app.main:app --reload
 app = FastAPI(lifespan=lifespan)

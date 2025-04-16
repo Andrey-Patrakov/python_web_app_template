@@ -60,19 +60,17 @@
             >
               <v-avatar
                 color="app-primary"
-                size="120"
+                size="160"
               >
-                <img
-                  v-if="avatar"
-                  width="120"
-                  aspect-ratio="1/1"
-                  :src="avatar"
-                  alt=""
-                >
+                <v-img
+                  v-if="user.avatar"
+                  :src="user.avatar"
+                  alt="avatar image"
+                />
                 <v-icon
                   v-else
                   icon="mdi-account"
-                  size="120"
+                  size="160"
                   color="white"
                 />
               </v-avatar>
@@ -153,7 +151,6 @@ import { userStore, type UpdateInfoInterface } from '@/stores/user';
 import rules from '@/rules';
 import router from '@/router';
 
-const avatar = '';
 const user = userStore();
 const $rules = rules();
 const isValid = ref<boolean>(false);

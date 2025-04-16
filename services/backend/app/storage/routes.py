@@ -1,4 +1,3 @@
-from uuid import uuid4
 from fastapi import APIRouter, UploadFile, File, Depends
 from fastapi.responses import StreamingResponse
 from .storage import Storage
@@ -23,14 +22,12 @@ async def upload(
         file: UploadFile = File(),
         user=Depends(get_current_user)) -> FileSchema:
 
-    storage_id = str(uuid4())
+    storage_id = storage.upload(file.file, file.size)
     await FileDAO.add(
         filename=file.filename,
         size=file.size,
         storage_id=storage_id,
         user_id=user.id)
-
-    storage.upload(storage_id, file.file, file.size)
 
     return {
         'storage_id': storage_id,

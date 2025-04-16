@@ -1,6 +1,8 @@
 // Utilities
 import { defineStore } from 'pinia'
 import axios from 'axios';
+import { getFileLink } from '@/stores/storage';
+
 
 export interface UserState {
   email: string | null,
@@ -9,6 +11,7 @@ export interface UserState {
   created_at: Date | null,
   is_verified: boolean,
   isAuthenticated: boolean,
+  avatar: string | null,
 }
 
 export interface RegisterInterface {
@@ -41,6 +44,7 @@ export const userStore = defineStore('user', {
     created_at: null,
     is_verified: false,
     isAuthenticated: false,
+    avatar: null,
   }),
 
   actions: {
@@ -65,13 +69,14 @@ export const userStore = defineStore('user', {
 
     async viewMe() {
       try {
-        await axios.get('/user/me').then((res) => {
+        await axios.get('/user/me').then(async (res) => {
           this.email = res.data.email;
           this.username = res.data.username;
           this.description = res.data.description || '';
           this.is_verified = res.data.is_verified;
           this.isAuthenticated = true;
           this.created_at = new Date(res.data.created_at);
+          this.avatar = res.data.avatar ? await getFileLink(res.data.avatar) : null;
         });
       } catch(error) {
         this.clear();

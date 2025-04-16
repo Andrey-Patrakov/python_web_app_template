@@ -22,6 +22,7 @@ class UserSchema(BaseModel):
     description: str | None = Field(..., description="Описание пользователя")
     is_verified: bool = Field(..., description='Подтверждена ли почта')
     created_at: datetime = Field(..., description='Дата создания пользователя')
+    avatar: str | None = Field(..., description='Идентификатор аватара в хранилище') # noqa
 
 
 class UserUpdateInfoSchema(BaseModel):
