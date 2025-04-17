@@ -58,22 +58,44 @@
               order-md="2"
               order="1"
             >
-              <v-avatar
-                color="app-primary"
-                size="160"
-              >
-                <v-img
-                  v-if="user.avatar"
-                  :src="user.avatar"
-                  alt="avatar image"
+              <v-hover>
+                <template #default="{ isHovering, props }">
+                  <label
+                    for="f-input"
+                    v-bind="props"
+                  >
+                    <v-avatar
+                      color="app-primary"
+                      size="160"
+                    >
+                      <v-icon
+                        v-if="isHovering"
+                        icon="mdi-upload-circle-outline"
+                        size="160"
+                        color="white"
+                      />
+                      <v-img
+                        v-else-if="user.avatar"
+                        :src="user.avatar"
+                        alt="avatar image"
+                      />
+                      <v-icon
+                        v-else
+                        icon="mdi-account"
+                        size="160"
+                        color="white"
+                      />
+                    </v-avatar>
+                  </label>
+                </template>
+              </v-hover>
+              <div hidden>
+                <v-file-input
+                  id="f-input"
+                  accept="image/*"
+                  @update:model-value="user.uploadAvatar"
                 />
-                <v-icon
-                  v-else
-                  icon="mdi-account"
-                  size="160"
-                  color="white"
-                />
-              </v-avatar>
+              </div>
             </v-col>
           </v-row>
   

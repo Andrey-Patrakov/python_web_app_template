@@ -106,6 +106,17 @@ export const userStore = defineStore('user', {
       return message;
     },
 
+    async uploadAvatar(file:File | File[]) {
+      const form = new FormData();
+      if (file instanceof File) {
+        form.append('file', file);
+      } else {
+        form.append('file', file[0]);
+      }
+      await axios.post('user/change_avatar', form);
+      this.viewMe();
+    },
+
     clear() {
       this.$reset();
     },
