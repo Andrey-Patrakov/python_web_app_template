@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.lifespan import lifespan
+from app.middleware import ContentSizeLimitMiddleware
 
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
@@ -13,8 +14,11 @@ app.add_middleware(
     allow_origins=[settings.BACKEND_URL, settings.FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
-)
+    allow_headers=["*"],)
+
+app.add_middleware(
+    ContentSizeLimitMiddleware,
+    max_content_size=settings.storage.FILE_MAX_LENGTH)
 
 
 @app.get('/')

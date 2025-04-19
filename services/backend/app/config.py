@@ -18,6 +18,7 @@ class SettingsStorage(BaseSettings):
     BUCKET: str
     ACCESS_KEY: str
     SECRET_KEY: str
+    FILE_MAX_LENGTH: int = 500 * 1024**2
 
 
 class SettingsSMTP(BaseSettings):
