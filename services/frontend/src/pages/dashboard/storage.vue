@@ -3,16 +3,17 @@
     <v-card :disabled="progress > 0">
       <v-card-title>Файловое хранилище</v-card-title>
 
-      <!-- <v-card-subtitle>
+      <v-card-subtitle>
         <v-progress-linear
-          v-model="ailableSpace"
+          v-model="availableSpace"
           height="50"
           color="blue"
           striped
         >
-          Доступное место на диске
+          Занято места на диске
+          ({{ storage.usedString }} / {{ storage.availableString }})
         </v-progress-linear>
-      </v-card-subtitle> -->
+      </v-card-subtitle>
 
       <v-container>
         <v-row>
@@ -161,8 +162,13 @@ const downloadFile = async (file: File) => {
   await storage.download(file, onProgress);
 }
 
+const availableSpace = computed(() => {
+  return Math.ceil(storage.used / storage.available * 100);
+});
+
 onMounted(async () => {
   await refreshList();
+  await storage.status();
 });
 
 const storage = storageStore();

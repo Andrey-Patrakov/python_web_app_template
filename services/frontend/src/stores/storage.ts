@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from 'axios';
 
+interface StorageState {
+  used: number,
+  available: number,
+  usedString: string,
+  availableString: string,
+}
+
 export interface File {
   id: string,
   filename: string,
@@ -12,7 +19,7 @@ export interface File {
 
 const fileSizeToString = (size: number) => {
   if (!size) {
-    return '';
+    return '0KB';
   }
 
   const items = ['KB', 'MB', 'GB'];
@@ -61,6 +68,13 @@ export const getFileLink = async (
 
 export const storageStore = defineStore('storage', {
 
+  state: (): StorageState => ({
+    used: 0,
+    available: 0,
+    usedString: '',
+    availableString: '',
+  }),
+
   getters: {
     async getUserFiles() {
       const files_list: File[] = [];
@@ -83,6 +97,21 @@ export const storageStore = defineStore('storage', {
   },
 
   actions: {
+    async status() {
+      await axios.get('storage/status').then(response => {
+        this.used = response.data.used_space;
+        this.available = response.data.available_space;
+        this.usedString = fileSizeToString(this.used * 1024 * 1024);
+        this.availableString = fileSizeToString(this.available * 1024 * 1024);
+      });
+      return <StorageState>{
+        used: this.used,
+        available: this.available,
+        usedString: this.usedString,
+        availableString: this.availableString,
+      }
+    },
+
     async upload(files:never[], on_progress: null | ((progress: number) => void) = null) {
       for (let i = 0; i < files.length; i++) {
         const form = new FormData();
@@ -106,6 +135,7 @@ export const storageStore = defineStore('storage', {
       if (on_progress) {
         on_progress(0);
       }
+      await this.status();
     },
 
     async getLink(file: File, on_progress: null | ((progress: number) => void) = null) {
@@ -125,6 +155,7 @@ export const storageStore = defineStore('storage', {
 
     async delete(file: File) {
       await axios.delete(`storage/${file.id}`);
+      await this.status();
     },
   },
 })
