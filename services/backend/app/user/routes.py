@@ -1,3 +1,5 @@
+from PIL import Image
+from io import BytesIO
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi import UploadFile, File
 
@@ -106,7 +108,33 @@ async def change_avatar(
     if user.avatar:
         storage.delete(user.avatar)
 
-    storage_id = storage.upload(file=file.file, length=file.size)
+    try:
+        image_io = BytesIO()
+        image = Image.open(file.file)
+
+        center_x = image.size[0] // 2
+        center_y = image.size[1] // 2
+        min_size = min(image.size) // 2
+
+        image = image.crop((
+            center_x - min_size,
+            center_y - min_size,
+            center_x + min_size,
+            center_y + min_size))
+
+        image.thumbnail((256, 256))
+
+        image.save(image_io, 'PNG', quality=50)
+        image_io.seek(0)
+
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail='Не удалось обработать изображение!')
+
+    storage_id = storage.upload(
+        file=image_io, length=image_io.getbuffer().nbytes)
+
     await UserDAO.update(filter_by={'id': user.id}, avatar=storage_id)
 
     return {'message': 'Аватар изменен успешно!'}
