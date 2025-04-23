@@ -1,5 +1,8 @@
 <template>
-  <v-snackbar-queue v-model="messages.queue" location="bottom right"/>
+  <v-snackbar-queue
+    v-model="messages.queue"
+    location="bottom right"
+  />
 </template>
 
 <script lang="ts" setup>
