@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppBar: typeof import('./components/app/AppBar.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    AppMessages: typeof import('./components/app/AppMessages.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     LinkList: typeof import('./components/LinkList/LinkList.vue')['default']
     LinkListNode: typeof import('./components/LinkList/LinkListNode.vue')['default']
