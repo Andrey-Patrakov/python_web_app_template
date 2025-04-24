@@ -128,7 +128,9 @@
 import { ref } from 'vue';
 import { VFileUpload } from 'vuetify/labs/VFileUpload'
 
-import { type File, storageStore } from '@/stores/storage';
+import { type File, useStorageStore } from '@/stores/storage';
+
+const storage = useStorageStore();
 
 const progress = ref(0);
 const uploads = ref([]);
@@ -170,7 +172,5 @@ onMounted(async () => {
   await refreshList();
   await storage.status();
 });
-
-const storage = storageStore();
 
 </script>

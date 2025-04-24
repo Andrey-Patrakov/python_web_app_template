@@ -64,7 +64,7 @@
           <v-row v-if="errorMessage">
             <v-col>
               <div class="text-red-darken-4 text-body-2">
-                Ошибка: {{ errorMessage }}
+                {{ errorMessage }}
               </div>
             </v-col>
           </v-row>
@@ -96,8 +96,9 @@
 
 <script setup lang="ts">
 import rules from '@/rules';
-import { type PwdChangeInterface, userStore } from '@/stores/user';
+import { type PwdChangeInterface, useUserStore } from '@/stores/user';
 const $rules = rules();
+const user = useUserStore();
 
 const showDialog = defineModel<boolean>();
 const isValid = ref<boolean>(false);
@@ -131,11 +132,7 @@ const submit = async () => {
       await user.changePassword(pwdForm.value);
       close();
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (typeof error?.response?.data?.detail == 'string') {
-        errorMessage.value = error.response.data.detail;
-      } else {
-        errorMessage.value = `${error.code}: ${error.message}`;
-      }
+      errorMessage.value = error.message;
     }
   }
 };
@@ -145,5 +142,4 @@ const close = () => {
   clear();
 };
 
-const user = userStore();
 </script>

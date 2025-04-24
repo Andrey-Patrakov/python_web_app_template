@@ -56,7 +56,7 @@
           <v-row v-if="errorMessage">
             <v-col>
               <div class="text-red-darken-4 text-body-2">
-                Ошибка: {{ errorMessage }}
+                {{ errorMessage }}
               </div>
             </v-col>
           </v-row>
@@ -89,10 +89,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import router from '@/router';
-import { userStore, type RegisterInterface } from '@/stores/user';
+import { useUserStore, type RegisterInterface } from '@/stores/user';
 import rules from '@/rules';
 
+const user = useUserStore();
 const $rules = rules();
+
 const isValid = ref<boolean>(false);
 const errorMessage = ref<string>('');
 const password2 = ref<string>('');
@@ -105,18 +107,14 @@ const userForm = ref<RegisterInterface>({
 
 const submit = async () => {
   if (!isValid.value) {
-    errorMessage.value = 'Поля заполнены некорректно';
+    errorMessage.value = 'Ошибка: Поля заполнены некорректно';
   }
   else {
     try {
       await user.register(userForm.value);
       router.replace('/user/login');
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (typeof error?.response?.data?.detail == 'string') {
-        errorMessage.value = error.response.data.detail;
-      } else {
-        errorMessage.value = `${error.code}: ${error.message}`;
-      }
+      errorMessage.value = error.message;
     }
   }
 };
@@ -128,5 +126,4 @@ const clear = () => {
   password2.value = '';
 };
 
-const user = userStore();
 </script>

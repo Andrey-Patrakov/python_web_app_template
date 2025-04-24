@@ -45,7 +45,11 @@
 
 <script lang="ts" setup>
 import router from '@/router';
-import { userStore } from '@/stores/user';
+import { useMessagesStore } from '@/stores/messages';
+import { useUserStore } from '@/stores/user';
+
+const user = useUserStore();
+const messages = useMessagesStore();
 
 const checkVerification = async () => {
   await user.viewMe();
@@ -68,9 +72,10 @@ onMounted(async () => {
       if (await checkVerification()) {
         message.value += ' Эту страницу можно закрыть.';
       }
-    } catch {
+    } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       error.value = true;
-      message.value = 'При выполнении операции возникла ошибка!'
+      messages.error(e.message);
+      message.value = `При выполнении операции возникла ошибка! ${e.message}`;
     }
   } else {
     verification.value = false;
@@ -91,5 +96,4 @@ onUnmounted(() => {
   }
 });
 
-const user = userStore();
 </script>

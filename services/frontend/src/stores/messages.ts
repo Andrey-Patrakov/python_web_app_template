@@ -24,4 +24,16 @@ export const useMessagesStore = defineStore('messages', {
 
   },
 
-})
+});
+
+export const showApiErrorMessage = (error: any) => {// eslint-disable-line @typescript-eslint/no-explicit-any
+  const messages = useMessagesStore();
+
+  let message = error.message;
+  if (typeof error?.response?.data?.detail == 'string') {
+    message = error.response.data.detail;
+  }
+  const errorMessage = `Ошибка ${error.status}: ${message}`;
+  messages.error(errorMessage);
+  return errorMessage;
+}

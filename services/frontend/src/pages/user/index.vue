@@ -134,14 +134,6 @@
               />
             </v-col>
           </v-row>
-  
-          <v-row v-if="errorMessage">
-            <v-col>
-              <div class="text-red-darken-4 text-body-2">
-                Ошибка: {{ errorMessage }}
-              </div>
-            </v-col>
-          </v-row>
         </v-card-text>
   
         <v-divider />
@@ -169,15 +161,14 @@
 import changePwdDialog from './$dialogs/ChangePwdDialog.vue';
 
 import { ref } from 'vue';
-import { userStore, type UpdateInfoInterface } from '@/stores/user';
+import { useUserStore, type UpdateInfoInterface } from '@/stores/user';
 import rules from '@/rules';
 import router from '@/router';
 
-const user = userStore();
+const user = useUserStore();
 const $rules = rules();
 const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
-const errorMessage = ref<string>('');
 const infoMessage = ref<string>('');
 
 interface IUserForm {

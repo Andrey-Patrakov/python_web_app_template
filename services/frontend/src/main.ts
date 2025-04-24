@@ -17,6 +17,14 @@ import axios from 'axios'
 axios.defaults.baseURL = import.meta.env.VITE_API_ROOT;
 axios.defaults.withCredentials = true;
 
+import { showApiErrorMessage } from '@/stores/messages';
+axios.interceptors.response.use((response) => {
+    return response;
+  }, (error) => {
+    error.message = showApiErrorMessage(error);
+    throw error
+});
+
 const app = createApp(App)
 
 registerPlugins(app)

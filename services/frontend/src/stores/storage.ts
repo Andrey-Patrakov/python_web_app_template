@@ -66,7 +66,7 @@ export const getFileLink = async (
   return url;
 }
 
-export const storageStore = defineStore('storage', {
+export const useStorageStore = defineStore('storage', {
 
   state: (): StorageState => ({
     used: 0,

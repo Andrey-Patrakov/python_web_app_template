@@ -34,7 +34,7 @@
           <v-row v-if="errorMessage">
             <v-col>
               <div class="text-red-darken-4 text-body-2">
-                Ошибка: {{ errorMessage }}
+                {{ errorMessage }}
               </div>
             </v-col>
           </v-row>
@@ -66,9 +66,11 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { userStore, type LoginInterface } from '@/stores/user';
+import { useUserStore, type LoginInterface } from '@/stores/user';
 import router from '@/router';
 import rules from '@/rules';
+
+const user = useUserStore();
 
 const $rules = rules();
 const isValid = ref<boolean>(false);
@@ -94,14 +96,9 @@ const submit = async () => {
       router.replace('/user');
       return 0;
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (typeof error?.response?.data?.detail == 'string') {
-        errorMessage.value = error.response.data.detail;
-      } else {
-        errorMessage.value = `${error.code}: ${error.message}`;
-      }
+      errorMessage.value = error.message;
     }
   }
 }
 
-const user = userStore();
 </script>

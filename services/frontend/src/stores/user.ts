@@ -36,7 +36,7 @@ export interface PwdChangeInterface {
   new_password: string,
 }
 
-export const userStore = defineStore('user', {
+export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     email: null,
     username: null,
@@ -68,20 +68,21 @@ export const userStore = defineStore('user', {
     },
 
     async viewMe() {
-      try {
-        await axios.get('/user/me').then(async (res) => {
-          this.email = res.data.email;
-          this.username = res.data.username;
-          this.description = res.data.description || '';
-          this.is_verified = res.data.is_verified;
-          this.isAuthenticated = true;
-          this.created_at = new Date(res.data.created_at);
-          this.avatar = res.data.avatar ? await getFileLink(res.data.avatar) : null;
-        });
-      } catch(error) {
-        this.clear();
-        throw error;
-      }
+      const clear = this.clear;
+      await axios.get('/user/me', {
+        validateStatus: function () {
+          clear();
+          return true;
+        }
+      }).then(async (res) => {
+        this.email = res.data.email;
+        this.username = res.data.username;
+        this.description = res.data.description || '';
+        this.is_verified = res.data.is_verified;
+        this.isAuthenticated = true;
+        this.created_at = new Date(res.data.created_at);
+        this.avatar = res.data.avatar ? await getFileLink(res.data.avatar) : null;
+      });
     },
 
     async updateInfo(user: UpdateInfoInterface) {

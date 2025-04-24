@@ -60,10 +60,12 @@
 
 <script lang="ts" setup>
 import router from '@/router';
-import { userStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user';
 import LinkList from '@/components/LinkList/LinkList.vue';
 import type ListNodeInteface from '../LinkList/listNodeInterface';
 import vuetify from '@/plugins/vuetify';
+
+const user = useUserStore();
 
 const showUserMenu = ref(false)
 const username = computed(() => {
@@ -99,5 +101,4 @@ onMounted(() => {
   user.viewMe();
 });
 
-const user = userStore();
 </script>
