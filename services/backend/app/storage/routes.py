@@ -3,7 +3,7 @@ from fastapi.responses import StreamingResponse
 from .storage import Storage
 from .dao import FileDAO
 from .schemas import FileSchema, StorageSchema
-from app.user import get_current_user
+from app.user import get_verified_user
 
 
 router = APIRouter(prefix='/storage', tags=['Файловое хранилище'])
@@ -12,7 +12,7 @@ storage = Storage()
 
 @router.get('/status')
 async def get_storage_status(
-        user=Depends(get_current_user)) -> StorageSchema:
+        user=Depends(get_verified_user)) -> StorageSchema:
 
     return {
         'used_space': await FileDAO.used_space(user.id),
@@ -21,7 +21,7 @@ async def get_storage_status(
 
 @router.get('/list')
 async def get_files_list(
-        user=Depends(get_current_user)) -> list[FileSchema]:
+        user=Depends(get_verified_user)) -> list[FileSchema]:
 
     return await FileDAO.find_all(user_id=user.id)
 
@@ -29,7 +29,7 @@ async def get_files_list(
 @router.post('/upload')
 async def upload(
         file: UploadFile = File(),
-        user=Depends(get_current_user)) -> FileSchema:
+        user=Depends(get_verified_user)) -> FileSchema:
 
     used_space = await FileDAO.used_space(user.id)
     used_space += file.size / 1024**2
@@ -63,7 +63,7 @@ async def download(name) -> StreamingResponse:
 @router.delete('/{storage_id}')
 async def delete_file(
         storage_id: str,
-        user=Depends(get_current_user)) -> dict:
+        user=Depends(get_verified_user)) -> dict:
 
     deleted = await FileDAO.delete(user_id=user.id, storage_id=storage_id)
     if deleted:

@@ -17,10 +17,14 @@ import axios from 'axios'
 axios.defaults.baseURL = import.meta.env.VITE_API_ROOT;
 axios.defaults.withCredentials = true;
 
+import router from './router';
 import { showApiErrorMessage } from '@/stores/messages';
 axios.interceptors.response.use((response) => {
     return response;
   }, (error) => {
+    if (error.status == 403) {
+      router.push('/user');
+    }
     error.message = showApiErrorMessage(error);
     throw error
 });

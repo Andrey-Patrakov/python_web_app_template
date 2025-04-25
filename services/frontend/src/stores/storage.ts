@@ -126,9 +126,6 @@ export const useStorageStore = defineStore('storage', {
               on_progress(progress);
             }
           }
-        })
-        .catch(error => {
-          console.log(error);
         });
       }
 

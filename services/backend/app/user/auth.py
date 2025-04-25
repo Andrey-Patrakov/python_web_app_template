@@ -1,5 +1,6 @@
 from passlib.context import CryptContext
 from fastapi import HTTPException, status, Request, Response
+from .user.models import User
 from .user import UserDAO
 from .token import JWT_Token
 from .token import TokenNotFoundError, TokenInvalidError, TokenBlacklistedError
@@ -59,7 +60,7 @@ async def logout_user(request: Request, response: Response):
     return {'detail': 'Выход произведен успешно!'}
 
 
-async def get_current_user(request: Request, response: Response):
+async def get_current_user(request: Request, response: Response) -> User:
     try:
         try:
             user_id = await JWT_Token.get_user_from_access_token(request)
@@ -82,5 +83,15 @@ async def get_current_user(request: Request, response: Response):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail='Пользователь не найден')
+
+    return user
+
+
+async def get_verified_user(request: Request, response: Response) -> User:
+    user = await get_current_user(request, response)
+    if not user.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail='Требуется подтверждение адреса электронной почты.')
 
     return user

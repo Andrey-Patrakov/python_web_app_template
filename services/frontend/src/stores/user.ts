@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios';
 import { getFileLink } from '@/stores/storage';
-
+import { showApiErrorMessage } from './messages';
 
 export interface UserState {
   email: string | null,
@@ -68,13 +68,8 @@ export const useUserStore = defineStore('user', {
     },
 
     async viewMe() {
-      const clear = this.clear;
-      await axios.get('/user/me', {
-        validateStatus: function () {
-          clear();
-          return true;
-        }
-      }).then(async (res) => {
+      const api = axios.create(); // to ignore interceptors
+      await api.get('/user/me').then (async (res) => {
         this.email = res.data.email;
         this.username = res.data.username;
         this.description = res.data.description || '';
@@ -82,6 +77,11 @@ export const useUserStore = defineStore('user', {
         this.isAuthenticated = true;
         this.created_at = new Date(res.data.created_at);
         this.avatar = res.data.avatar ? await getFileLink(res.data.avatar) : null;
+      }).catch((error) => {
+        if (error.status != 401) {
+          showApiErrorMessage(error);
+        }
+        this.clear();
       });
     },
 
