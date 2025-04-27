@@ -44,8 +44,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    BACKEND_URL: str
-    FRONTEND_URL: str
+    FRONTEND_HOST: str
+    FRONTEND_PORT: str
+    ALLOWED_HOSTS: list[str] = []
 
 
 settings = Settings()
@@ -55,3 +56,12 @@ def get_db_url():
     url = f'postgresql+asyncpg://{settings.db.USER}:{settings.db.PASSWORD}'
     url += f'@{settings.db.HOST}:{settings.db.PORT}/{settings.db.NAME}'
     return url
+
+
+def get_allowed_hosts():
+    allowed_hosts = settings.ALLOWED_HOSTS
+    allowed_hosts.append(f'{settings.FRONTEND_HOST}:{settings.FRONTEND_HOST}')
+    if settings.FRONTEND_PORT == "80":
+        allowed_hosts.append(settings.FRONTEND_HOST)
+
+    return allowed_hosts

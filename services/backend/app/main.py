@@ -3,7 +3,7 @@ from app.lifespan import lifespan
 from app.middleware import ContentSizeLimitMiddleware
 
 from fastapi.middleware.cors import CORSMiddleware
-from app.config import settings
+from app.config import settings, get_allowed_hosts
 from app.user.routes import router as user_router
 from app.storage.routes import router as storage_router
 
@@ -11,7 +11,7 @@ from app.storage.routes import router as storage_router
 app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.BACKEND_URL, settings.FRONTEND_URL],
+    allow_origins=get_allowed_hosts(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],)
