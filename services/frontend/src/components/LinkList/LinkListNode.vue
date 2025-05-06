@@ -3,7 +3,7 @@
     v-if="params.data.children && params.data.children.length"
     :value="params.data.title"
   >
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-list-item
         v-bind="props"
         :prepend-icon="params.data.icon"
