@@ -158,7 +158,7 @@
 </template>
 
 <script lang="ts" setup>
-import changePwdDialog from './$dialogs/ChangePwdDialog.vue';
+import changePwdDialog from '@/components/user/ChangePwdDialog.vue';
 
 import { ref } from 'vue';
 import { useUserStore, type UpdateInfoInterface } from '@/stores/user';
