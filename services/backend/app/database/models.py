@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Annotated
 
-from sqlalchemy import func, true, false
+from sqlalchemy import func, true, false, DateTime
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, declared_attr
 from sqlalchemy.orm import mapped_column
@@ -12,8 +12,8 @@ str_not_null = Annotated[str, mapped_column(nullable=False)]
 str_null = Annotated[str, mapped_column(nullable=True)]
 bool_true = Annotated[bool, mapped_column(server_default=true())]
 bool_false = Annotated[bool, mapped_column(server_default=false())]
-created_at = Annotated[datetime, mapped_column(server_default=func.now())]
-datetime_null = Annotated[datetime, mapped_column(nullable=True)]
+created_at = Annotated[datetime, mapped_column(type_=DateTime(timezone=True), server_default=func.now())]  # noqa
+datetime_null = Annotated[datetime, mapped_column(type_=DateTime(timezone=True), nullable=True)]  # noqa
 
 
 # alembic init -t async migration -- Инициализация alembic
