@@ -2,11 +2,17 @@ import { defineStore } from "pinia";
 
 interface MessagesState {
   queue: object[]
+  showYesNo: boolean
+  yesNoMessage: string
+  resolve: (value: boolean) => void; 
 }
 
 export const useMessagesStore = defineStore('messages', {
   state: (): MessagesState => ({
     queue: [],
+    showYesNo: false,
+    yesNoMessage: '',
+    resolve: (value: boolean) => { return value }
   }),
 
   actions: {
@@ -22,6 +28,25 @@ export const useMessagesStore = defineStore('messages', {
       this.queue.push({text: message, color: 'error'});
     },
 
+    async yesNo(message: string) {
+      this.yesNoMessage = message;
+      this.showYesNo = true;
+      return new Promise((resolve) => {
+        this.resolve = resolve;
+      })
+    },
+
+    resolveYes() {
+      this.resolve(true);
+      this.showYesNo = false;
+      this.yesNoMessage = '';
+    },
+
+    resolveNo() {
+      this.resolve(false);
+      this.showYesNo = false;
+      this.yesNoMessage = '';
+    },
   },
 
 });
