@@ -3,6 +3,7 @@
     <app-bar />
     <router-view />
     <app-messages />
+    <yes-no-dialog />
   </v-app>
 </template>
 

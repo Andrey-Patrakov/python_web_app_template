@@ -47,6 +47,7 @@ class Settings(BaseSettings):
     FRONTEND_HOST: str
     FRONTEND_PORT: str
     ALLOWED_HOSTS: list[str] = []
+    SECURE: bool = False
 
 
 settings = Settings()

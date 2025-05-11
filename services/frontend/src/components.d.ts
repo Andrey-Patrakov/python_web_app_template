@@ -16,5 +16,6 @@ declare module 'vue' {
     LinkListNode: typeof import('./components/LinkList/LinkListNode.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    YesNoDialog: typeof import('./components/app/YesNoDialog.vue')['default']
   }
 }

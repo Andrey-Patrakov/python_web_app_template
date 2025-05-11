@@ -61,8 +61,8 @@ class JWT_Token:
         response.set_cookie(
             key=ACCESS_TOKEN_KEY,
             value=token,
-            httponly=True,
-            secure=True,
+            httponly=settings.SECURE,
+            secure=settings.SECURE,
             max_age=TOKEN_MAX_AGE)
 
         return token
@@ -79,8 +79,8 @@ class JWT_Token:
         response.set_cookie(
             key=REFRESH_TOKEN_KEY,
             value=token,
-            httponly=True,
-            secure=True,
+            httponly=settings.SECURE,
+            secure=settings.SECURE,
             max_age=TOKEN_MAX_AGE)
 
         return token
