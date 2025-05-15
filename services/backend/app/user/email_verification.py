@@ -13,7 +13,9 @@ async def get_verification_url(user_id: int):
     token = await VerificationToken.create(
         user_id=user_id, expires_delta=timedelta(minutes=30))
 
-    frontend_url = urlparse(settings.FRONTEND_URL)
+    frontend_url = urlparse(
+        f'{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}')
+
     path = 'user/verify'
     link = urlunsplit((
         frontend_url.scheme, frontend_url.netloc, path,
@@ -37,7 +39,8 @@ async def verify_email(token: str):
             detail='Токен не найден.')
 
     await VerificationToken.delete(token)
-    if token_obj.expires_at < datetime.now():
+    timezone = token_obj.expires_at.astimezone().tzinfo
+    if token_obj.expires_at < datetime.now(timezone):
         raise HTTPException(
             status_code=status.HTTP_410_GONE,
             detail='Ссылка устарела, выполните повторную отправку письма.')
