@@ -3,6 +3,8 @@
     <v-card
       class="mt-5 mx-auto"
       max-width="700px"
+      :loading="loading"
+      :disabled="loading"
     >
       <v-card-title>
         Пользователь: {{ user.username }}
@@ -50,6 +52,14 @@
                     :rules="[$rules.requred, $rules.email]"
                     @click:append-inner="verifyEmail"
                   />
+                  <v-btn
+                    v-if="!user.is_verified && !isChanged"
+                    color="info"
+                    width="100%"
+                    @click="verifyEmail"
+                  >
+                    Подтвердить E-mail
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-col>
@@ -172,6 +182,7 @@ const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
 const infoMessage = ref<string>('');
 const messages = useMessagesStore();
+const loading = ref(false);
 
 interface IUserForm {
   email: string,
@@ -200,17 +211,22 @@ const submit = async () => {
     }
   }
 
-    const info = <UpdateInfoInterface>{
-      email: userForm.value.email,
-      username: userForm.value.username,
-      description: userForm.value.description
-    };
-    user.updateInfo(info);
+  loading.value = true;
+  const info = <UpdateInfoInterface>{
+    email: userForm.value.email,
+    username: userForm.value.username,
+    description: userForm.value.description
+  };
+  user.updateInfo(info);
+  loading.value = false;
+
 };
 
 const verifyEmail = async () => {
+  loading.value = true;
   infoMessage.value = await user.sendMessage();
   router.push('/user/verify');
+  loading.value = false;
 }
 
 const isChanged = computed(() => {
