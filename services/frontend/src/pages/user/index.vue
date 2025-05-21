@@ -3,6 +3,8 @@
     <v-card
       class="mt-5 mx-auto"
       max-width="700px"
+      :loading="loading"
+      :disabled="loading"
     >
       <v-card-title>
         Пользователь: {{ user.username }}
@@ -50,6 +52,14 @@
                     :rules="[$rules.requred, $rules.email]"
                     @click:append-inner="verifyEmail"
                   />
+                  <v-btn
+                    v-if="!user.is_verified && !isChanged"
+                    color="info"
+                    width="100%"
+                    @click="verifyEmail"
+                  >
+                    Подтвердить E-mail
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-col>
@@ -164,12 +174,15 @@ import { ref } from 'vue';
 import { useUserStore, type UpdateInfoInterface } from '@/stores/user';
 import rules from '@/rules';
 import router from '@/router';
+import { useMessagesStore } from '@/stores/messages';
 
 const user = useUserStore();
 const $rules = rules();
 const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
 const infoMessage = ref<string>('');
+const messages = useMessagesStore();
+const loading = ref(false);
 
 interface IUserForm {
   email: string,
@@ -186,19 +199,34 @@ const userForm = ref<IUserForm>({
 });
 
 const submit = async () => {
-  if (isChanged.value) {
-    const info = <UpdateInfoInterface>{
-      email: userForm.value.email,
-      username: userForm.value.username,
-      description: userForm.value.description
-    };
-    user.updateInfo(info);
+  if (!isChanged.value) {
+    return;
   }
+
+  if (userForm.value.email.trim() != user.email && user.is_verified) {
+    let message = ' При смене адреса электронной почты потребуется повторное подтверждение!';
+    message += ' Вы уверены, что хотите продолжить?';
+    if (!await messages.yesNo(message)) {
+      return;
+    }
+  }
+
+  loading.value = true;
+  const info = <UpdateInfoInterface>{
+    email: userForm.value.email,
+    username: userForm.value.username,
+    description: userForm.value.description
+  };
+  user.updateInfo(info);
+  loading.value = false;
+
 };
 
 const verifyEmail = async () => {
+  loading.value = true;
   infoMessage.value = await user.sendMessage();
   router.push('/user/verify');
+  loading.value = false;
 }
 
 const isChanged = computed(() => {
