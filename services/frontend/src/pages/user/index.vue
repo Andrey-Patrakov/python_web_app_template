@@ -164,12 +164,14 @@ import { ref } from 'vue';
 import { useUserStore, type UpdateInfoInterface } from '@/stores/user';
 import rules from '@/rules';
 import router from '@/router';
+import { useMessagesStore } from '@/stores/messages';
 
 const user = useUserStore();
 const $rules = rules();
 const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
 const infoMessage = ref<string>('');
+const messages = useMessagesStore();
 
 interface IUserForm {
   email: string,
@@ -186,14 +188,24 @@ const userForm = ref<IUserForm>({
 });
 
 const submit = async () => {
-  if (isChanged.value) {
+  if (!isChanged.value) {
+    return;
+  }
+
+  if (userForm.value.email.trim() != user.email && user.is_verified) {
+    let message = ' При смене адреса электронной почты потребуется повторное подтверждение!';
+    message += ' Вы уверены, что хотите продолжить?';
+    if (!await messages.yesNo(message)) {
+      return;
+    }
+  }
+
     const info = <UpdateInfoInterface>{
       email: userForm.value.email,
       username: userForm.value.username,
       description: userForm.value.description
     };
     user.updateInfo(info);
-  }
 };
 
 const verifyEmail = async () => {
