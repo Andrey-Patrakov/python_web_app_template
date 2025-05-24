@@ -14,4 +14,4 @@ class Token(Base):
 
     user_id: Mapped[int] = mapped_column(
         ForeignKey('users.id'),
-        nullable=False)
+        nullable=True)

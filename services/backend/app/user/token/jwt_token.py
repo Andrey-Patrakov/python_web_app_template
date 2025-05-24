@@ -130,15 +130,13 @@ class JWT_Token:
     @classmethod
     async def delete_access_token(cls, request: Request, response: Response):
         token = await cls.get_access_token(request)
-        user = await cls.get_user_from_access_token(request)
-        await BlacklistedToken.add(token, user, ACCESS_TOKEN_EXPIRES_DELTA)
+        await BlacklistedToken.add(token, None, ACCESS_TOKEN_EXPIRES_DELTA)
         response.delete_cookie(ACCESS_TOKEN_KEY)
         return token
 
     @classmethod
     async def delete_refresh_token(cls, request: Request, response: Response):
         token = await cls.get_refresh_token(request)
-        user = await cls.get_user_from_refresh_token(request)
-        await BlacklistedToken.add(token, user, REFRESH_TOKEN_EXPIRES_DELTA)
+        await BlacklistedToken.add(token, None, REFRESH_TOKEN_EXPIRES_DELTA)
         response.delete_cookie(REFRESH_TOKEN_KEY)
         return token
