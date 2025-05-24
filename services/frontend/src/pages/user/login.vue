@@ -9,59 +9,57 @@
           v-model="isValid"
           @submit.prevent="submit"
         >
-          <v-card
-            title="Вход"
-          >
-            <v-card-text>
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-model="userForm.email"
-                    label="E-mail или имя пользователя"
-                    :rules="[$rules.requred, $rules.min_str_length(5)]"
-                  />
-                </v-col>
-              </v-row>
-              
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-model="userForm.password"
-                    label="Пароль"
-                    :rules="[$rules.requred, $rules.password]"
-                    type="password"
-                  />
-                </v-col>
-              </v-row>
-      
-              <v-row v-if="errorMessage">
-                <v-col>
-                  <div class="text-red-darken-4 text-body-2">
-                    {{ errorMessage }}
-                  </div>
-                </v-col>
-              </v-row>
-            </v-card-text>
-      
-            <v-divider />
-            <v-card-actions>
-              <v-btn
-                size="large"
-                color="app-primary"
-                class="ml-auto"
-                @click="clear"
-              >
-                Очистить
-              </v-btn>
-              <v-btn
-                type="submit"
-                variant="elevated"
-                size="large"
-                color="app-primary"
-              >
-                Подтвердить
-              </v-btn>
-            </v-card-actions>
+          <v-card>
+            <v-container>
+              <v-card-title class="text-h5">
+                Вход
+              </v-card-title>
+
+              <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="userForm.email"
+                      label="E-mail или имя пользователя"
+                      :rules="[$rules.requred, $rules.min_str_length(5)]"
+                    />
+                  </v-col>
+                </v-row>
+                
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="userForm.password"
+                      label="Пароль"
+                      :rules="[$rules.requred, $rules.password]"
+                      type="password"
+                    />
+                  </v-col>
+                </v-row>
+  
+                <v-row v-if="errorMessage">
+                  <v-col>
+                    <div class="text-red-darken-4 text-body-2">
+                      {{ errorMessage }}
+                    </div>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col>
+                    <v-btn
+                      type="submit"
+                      variant="elevated"
+                      size="large"
+                      width="100%"
+                      color="app-primary"
+                    >
+                      Войти
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-container>
           </v-card>
         </v-form>
       </v-col>
@@ -104,11 +102,6 @@ const userForm = ref<LoginInterface>({
   password: '',
 });
 
-const clear = () => {
-  userForm.value.email = '';
-  userForm.value.password = '';
-}
-
 const submit = async () => {
   if (!isValid.value) {
     errorMessage.value = 'Поля заполнены некорректно';
@@ -123,5 +116,4 @@ const submit = async () => {
     }
   }
 }
-
 </script>
