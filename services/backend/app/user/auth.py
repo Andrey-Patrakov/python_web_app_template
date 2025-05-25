@@ -3,8 +3,7 @@ from fastapi import HTTPException, status, Request, Response
 from .user.models import User
 from .user import UserDAO
 from .token import JWT_Token
-from .token import TokenNotFoundError, TokenInvalidError, TokenBlacklistedError
-from jose.exceptions import JWTError, ExpiredSignatureError
+from jose.exceptions import ExpiredSignatureError
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -68,15 +67,10 @@ async def get_current_user(request: Request, response: Response) -> User:
             user_id = await JWT_Token.get_user_from_refresh_token(request)
             await JWT_Token.create_access_token(user_id, response)
 
-    except (TokenNotFoundError,
-            TokenInvalidError,
-            TokenBlacklistedError,
-            JWTError) as e:
-        await logout_user(request, response)
-        error = 'Невалидный токен!' if type(e) is JWTError else str(e)
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=str(error))
+            detail='Пользователь не авторизован')
 
     user = await UserDAO.find_one_or_none_by_id(user_id)
     if not user:

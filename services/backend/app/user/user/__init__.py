@@ -5,6 +5,9 @@ from .schemas import UserAuthSchema
 from .schemas import UserSchema
 from .schemas import UserUpdateInfoSchema
 from .schemas import UserChangePwdSchema
+from .schemas import SendRestoreMessageSchema
+from .schemas import RestorePasswordSchema
+
 
 __all__ = [
     User,
@@ -14,4 +17,6 @@ __all__ = [
     UserSchema,
     UserUpdateInfoSchema,
     UserChangePwdSchema,
+    SendRestoreMessageSchema,
+    RestorePasswordSchema,
 ]

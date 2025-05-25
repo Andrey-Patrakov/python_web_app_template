@@ -1,88 +1,109 @@
 <template>
-  <v-container>
-    <v-form
-      v-model="isValid"
-      @submit.prevent="submit"
-    >
-      <v-card
-        title="Регистрация"
-        class="mt-5 mx-auto"
-        max-width="450px"
-      >
-        <v-card-text>
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="userForm.username"
-                label="Имя пользователя"
-                :rules="[$rules.requred, $rules.username]"
-              />
-            </v-col>
-          </v-row>
-  
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="userForm.email"
-                label="E-mail"
-                :rules="[$rules.requred, $rules.email]"
-              />
-            </v-col>
-          </v-row>
-          
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="userForm.password"
-                label="Пароль"
-                :rules="[$rules.requred, $rules.password]"
-                type="password"
-                @input="password2=''"
-              />
-            </v-col>
-          </v-row>
-  
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="password2"
-                label="Повторите пароль"
-                :rules="[$rules.requred, $rules.passwordRepeat(userForm.password)]"
-                type="password"
-              />
-            </v-col>
-          </v-row>
-  
-          <v-row v-if="errorMessage">
-            <v-col>
-              <div class="text-red-darken-4 text-body-2">
-                {{ errorMessage }}
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-  
-        <v-divider />
-        <v-card-actions>
-          <v-btn
-            size="large"
-            color="app-primary"
-            class="ml-auto"
-            @click="clear"
-          >
-            Очистить
-          </v-btn>
-          <v-btn
-            type="submit"
-            variant="elevated"
-            size="large"
-            color="app-primary"
-          >
-            Подтвердить
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-form>
+  <v-container
+    class="my-5 mx-auto"
+    max-width="500px"
+  >
+    <v-row>
+      <v-col>
+        <v-form
+          v-model="isValid"
+          @submit.prevent="submit"
+        >
+          <v-card>
+            <v-container>
+              <v-card-title class="text-h5">
+                Регистрация
+              </v-card-title>
+    
+              <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="userForm.username"
+                      label="Имя пользователя"
+                      :rules="[$rules.requred, $rules.username]"
+                    />
+                  </v-col>
+                </v-row>
+        
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="userForm.email"
+                      label="E-mail"
+                      :rules="[$rules.requred, $rules.email]"
+                    />
+                  </v-col>
+                </v-row>
+                
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="userForm.password"
+                      label="Пароль"
+                      :rules="[$rules.requred, $rules.password]"
+                      type="password"
+                      @input="password2=''"
+                    />
+                  </v-col>
+                </v-row>
+        
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="password2"
+                      label="Повторите пароль"
+                      :rules="[$rules.requred, $rules.passwordRepeat(userForm.password)]"
+                      type="password"
+                    />
+                  </v-col>
+                </v-row>
+        
+                <v-row v-if="errorMessage">
+                  <v-col>
+                    <div class="text-red-darken-4 text-body-2">
+                      {{ errorMessage }}
+                    </div>
+                  </v-col>
+                </v-row>
+    
+                <v-row>
+                  <v-col>
+                    <v-btn
+                      type="submit"
+                      variant="elevated"
+                      size="large"
+                      color="app-primary"
+                      width="100%"
+                    >
+                      Регистрация
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-container>
+          </v-card>
+        </v-form>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-card-text class="text-center">
+            Уже зарегистрированы?
+            <v-btn
+              color="blue"
+              variant="plain"
+              class="text-body-2 pa-0"
+              @click="router.push('/user/login')"
+            >
+              Войдите
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -118,12 +139,4 @@ const submit = async () => {
     }
   }
 };
-
-const clear = () => {
-  userForm.value.email = '';
-  userForm.value.username = '';
-  userForm.value.password = '';
-  password2.value = '';
-};
-
 </script>

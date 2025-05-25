@@ -6,163 +6,161 @@
       :loading="loading"
       :disabled="loading"
     >
-      <v-card-title>
-        Пользователь: {{ user.username }}
-        <v-card-subtitle
-          v-if="!user.is_verified"
-          class="text-red pl-0"
-        >
-          Внимание: E-mail пользователя не подтвержден!
-        </v-card-subtitle>
-      </v-card-title>
-  
-      <v-divider />
-  
-      <v-form
-        v-model="isValid"
-        @submit.prevent="submit"
-      >
-        <v-card-text>
-          <v-row>
-            <v-col
-              md="8"
-              order-md="1"
-              cols="12"
-              order="2"
-            >
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-model="userForm.username"
-                    variant="outlined"
-                    label="Имя пользователя"
-                    :rules="[$rules.requred, $rules.username]"
-                  />
-                </v-col>
-              </v-row>
-  
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-model="userForm.email"
-                    variant="outlined"
-                    label="E-mail"
-                    :prepend-inner-icon="user.is_verified ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline'"
-                    :append-inner-icon="user.is_verified || isChanged ? '' : 'mdi-send'"
-                    :rules="[$rules.requred, $rules.email]"
-                    @click:append-inner="verifyEmail"
-                  />
-                  <v-btn
-                    v-if="!user.is_verified && !isChanged"
-                    color="info"
-                    width="100%"
-                    @click="verifyEmail"
-                  >
-                    Подтвердить E-mail
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-col>
-            <v-col
-              class="text-center align-content-center"
-              order-md="2"
-              order="1"
-            >
-              <v-hover>
-                <template #default="{ isHovering, props }">
-                  <label
-                    for="f-input"
-                    v-bind="props"
-                  >
-                    <v-avatar
-                      color="app-primary"
-                      size="160"
-                    >
-                      <v-icon
-                        v-if="isHovering"
-                        icon="mdi-upload-circle-outline"
-                        size="160"
-                        color="white"
-                      />
-                      <v-img
-                        v-else-if="user.avatar"
-                        :src="user.avatar"
-                        alt="avatar image"
-                      />
-                      <v-icon
-                        v-else
-                        icon="mdi-account"
-                        size="160"
-                        color="white"
-                      />
-                    </v-avatar>
-                  </label>
-                </template>
-              </v-hover>
-              <div hidden>
-                <v-file-input
-                  id="f-input"
-                  accept="image/*"
-                  @update:model-value="user.uploadAvatar"
-                />
-              </div>
-            </v-col>
-          </v-row>
-  
-          <v-row>
-            <v-col
-              md="8"
-              cols="12"
-            >
-              <v-text-field
-                v-model="userForm.created_at"
-                variant="outlined"
-                label="Дата создания"
-                disabled
-              />
-            </v-col>
-            <v-col>
-              <v-btn
-                block
-                variant="elevated"
-                height="55"
-                @click="showDialog = true"
-              >
-                Смена пароля
-              </v-btn>
-            </v-col>
-          </v-row>
-  
-          <v-row>
-            <v-col>
-              <v-textarea
-                v-model="userForm.description"
-                variant="outlined"
-                label="Описание"
-                maxlength="1000"
-                counter="1000"
-              />
-            </v-col>
-          </v-row>
-        </v-card-text>
-  
-        <v-divider />
-  
-        <v-card-actions>
-          <v-btn
-            type="submit"
-            variant="elevated"
-            size="large"
-            class="ml-auto"
-            :color="!isChanged || !isValid ? 'gray-lighten-1' : 'app-primary'"
-            :disabled="!isChanged || !isValid"
+      <v-container>
+        <v-card-title>
+          Пользователь: {{ user.username }}
+          <v-card-subtitle
+            v-if="!user.is_verified"
+            class="text-red pl-0"
           >
-            Сохранить
-          </v-btn>
-        </v-card-actions>
-      </v-form>
-  
-      <change-pwd-dialog v-model="showDialog" />
+            Внимание: E-mail пользователя не подтвержден!
+          </v-card-subtitle>
+        </v-card-title>
+
+        <v-form
+          v-model="isValid"
+          @submit.prevent="submit"
+        >
+          <v-card-text>
+            <v-row>
+              <v-col
+                md="8"
+                order-md="1"
+                cols="12"
+                order="2"
+              >
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="userForm.username"
+                      variant="outlined"
+                      label="Имя пользователя"
+                      :rules="[$rules.requred, $rules.username]"
+                    />
+                  </v-col>
+                </v-row>
+    
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="userForm.email"
+                      variant="outlined"
+                      label="E-mail"
+                      :prepend-inner-icon="user.is_verified ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline'"
+                      :append-inner-icon="user.is_verified || isChanged ? '' : 'mdi-send'"
+                      :rules="[$rules.requred, $rules.email]"
+                      @click:append-inner="verifyEmail"
+                    />
+                    <v-btn
+                      v-if="!user.is_verified && !isChanged"
+                      color="info"
+                      width="100%"
+                      @click="verifyEmail"
+                    >
+                      Подтвердить E-mail
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col
+                class="text-center align-content-center"
+                order-md="2"
+                order="1"
+              >
+                <v-hover>
+                  <template #default="{ isHovering, props }">
+                    <label
+                      for="f-input"
+                      v-bind="props"
+                    >
+                      <v-avatar
+                        color="app-primary"
+                        size="160"
+                      >
+                        <v-icon
+                          v-if="isHovering"
+                          icon="mdi-upload-circle-outline"
+                          size="160"
+                          color="white"
+                        />
+                        <v-img
+                          v-else-if="user.avatar"
+                          :src="user.avatar"
+                          alt="avatar image"
+                        />
+                        <v-icon
+                          v-else
+                          icon="mdi-account"
+                          size="160"
+                          color="white"
+                        />
+                      </v-avatar>
+                    </label>
+                  </template>
+                </v-hover>
+                <div hidden>
+                  <v-file-input
+                    id="f-input"
+                    accept="image/*"
+                    @update:model-value="user.uploadAvatar"
+                  />
+                </div>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col
+                md="8"
+                cols="12"
+              >
+                <v-text-field
+                  v-model="userForm.created_at"
+                  variant="outlined"
+                  label="Дата создания"
+                  disabled
+                />
+              </v-col>
+              <v-col>
+                <v-btn
+                  block
+                  variant="elevated"
+                  height="55"
+                  @click="showDialog = true"
+                >
+                  Смена пароля
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-textarea
+                  v-model="userForm.description"
+                  variant="outlined"
+                  label="Описание"
+                  maxlength="1000"
+                  counter="1000"
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn
+              type="submit"
+              variant="elevated"
+              size="large"
+              class="ml-auto"
+              :color="!isChanged || !isValid ? 'gray-lighten-1' : 'app-primary'"
+              :disabled="!isChanged || !isValid"
+            >
+              Сохранить
+            </v-btn>
+          </v-card-actions>
+        </v-form>
+    
+        <change-pwd-dialog v-model="showDialog" />
+      </v-container>
     </v-card>
   </v-container>
 </template>

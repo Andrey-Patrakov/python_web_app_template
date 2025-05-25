@@ -34,3 +34,12 @@ class UserUpdateInfoSchema(BaseModel):
 class UserChangePwdSchema(BaseModel):
     old_password: str = Field(..., min_length=5, max_length=50, description='Старый пароль') # noqa
     new_password: str = Field(..., min_length=5, max_length=50, description='Новый пароль') # noqa
+
+
+class SendRestoreMessageSchema(BaseModel):
+    email: str = Field(..., description='Email пользователя')
+
+
+class RestorePasswordSchema(BaseModel):
+    token: str = Field(..., description='Токен для восстановления пароля ')
+    new_password: str = Field(..., min_length=5, max_length=50, description='Новый пароль') # noqa

@@ -7,12 +7,15 @@ from .user import User
 from .user import UserDAO
 from .user import UserRegisterSchema, UserAuthSchema, UserSchema
 from .user import UserUpdateInfoSchema, UserChangePwdSchema
+from .user import SendRestoreMessageSchema, RestorePasswordSchema
 
 from .auth import get_current_user
 from .auth import get_password_hash, verify_password
 from .auth import register_user, authenticate_user, logout_user
-from .email_verification import get_verification_url, create_message
-from .email_verification import verify_email
+from .email_verification import get_verification_url, verify_email
+from .email_verification import create_message as create_verification_message
+from .restore_pwd import get_pwd_restore_url, change_password
+from .restore_pwd import create_message as create_pwd_restore_message
 from .token import EmailVerificationSchema
 
 from app.mail import SMTP_Mail
@@ -78,6 +81,33 @@ async def change_pwd(
     return {'message': 'Данные обновлены успешно!'}
 
 
+@router.post('/send_restore_message')
+async def send_restore_message(
+        send_message_form: SendRestoreMessageSchema) -> dict:
+
+    user = await UserDAO.find_one_or_none(email=send_message_form.email)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Пользователь с таким E-mail не найден')
+
+    link, sitename = await get_pwd_restore_url(user.id)
+
+    with SMTP_Mail() as mail:
+        message = mail.message(user.email, 'Восстановление пароля')
+        message.attach_html(create_pwd_restore_message(link, sitename))
+        message.send()
+
+    return {
+        'message': 'Письмо отправлено на указанный адрес электронной почты!'}
+
+
+@router.post('/restore_password')
+async def restore_password(pwd_form: RestorePasswordSchema):
+    await change_password(pwd_form.token, pwd_form.new_password)
+    return {'message': 'Пароль изменен успешно!'}
+
+
 @router.post('/send_message')
 async def send_message(user: User = Depends(get_current_user)) -> dict:
     link, sitename = await get_verification_url(user.id)
@@ -85,7 +115,7 @@ async def send_message(user: User = Depends(get_current_user)) -> dict:
         message = mail.message(
             user.email, 'Для завершения регистрации подтвердите свой email')
 
-        message.attach_html(create_message(link, sitename))
+        message.attach_html(create_verification_message(link, sitename))
         message.send()
 
     return {
