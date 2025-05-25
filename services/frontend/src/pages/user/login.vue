@@ -36,7 +36,21 @@
                     />
                   </v-col>
                 </v-row>
-  
+
+                <v-row>
+                  <v-col>
+                    <v-btn
+                      color="blue"
+                      variant="plain"
+                      density="compact"
+                      class="text-body-2 pa-0"
+                      @click="router.push('/user/restore-pwd')"
+                    >
+                      Забыли пароль?
+                    </v-btn>
+                  </v-col>
+                </v-row>
+
                 <v-row v-if="errorMessage">
                   <v-col>
                     <div class="text-red-darken-4 text-body-2">

@@ -36,6 +36,15 @@ export interface PwdChangeInterface {
   new_password: string,
 }
 
+export interface SendRestoreMessageInterface {
+  email: string,
+}
+
+export interface RestorePasswordInterface {
+  token: string,
+  new_password: string,
+}
+
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     email: null,
@@ -116,6 +125,22 @@ export const useUserStore = defineStore('user', {
       }
       await axios.post('user/change_avatar', form);
       this.viewMe();
+    },
+
+    async sendRestoreMessage(send_message_form: SendRestoreMessageInterface) {
+      let message = '';
+      await axios.post('user/send_restore_message', send_message_form).then((res) => {
+        message = res.data.message;
+      });
+      return message;
+    },
+
+    async restorePassword(form: RestorePasswordInterface) {
+      let message = '';
+      await axios.post('user/restore_password', form).then((res) => {
+        message = res.data.message;
+      });
+      return message;
     },
 
     clear() {

@@ -7,6 +7,7 @@ from .dao import TokenDAO
 BASE_TOKEN = 0
 BLACKLISTED_TOKEN = 1
 VERIFICATION_TOKEN = 2
+PWD_RESTORE_TOKEN = 3
 
 
 class Token:
@@ -64,3 +65,7 @@ class BlacklistedToken(Token):
 
 class VerificationToken(Token):
     TOKEN_TYPE = VERIFICATION_TOKEN
+
+
+class PasswordRestoreToken(Token):
+    TOKEN_TYPE = PWD_RESTORE_TOKEN
