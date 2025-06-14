@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Response, status
 from .core import route
+from services.users.routes import router as users_router
 
 
 app = FastAPI()
@@ -14,3 +15,6 @@ app = FastAPI()
     response_model=None)
 async def home_page(request: Request, response: Response):
     pass
+
+
+app.include_router(users_router)

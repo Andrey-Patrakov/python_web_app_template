@@ -13,4 +13,5 @@ class UserRepository(SQLAlchemyRepository):
                 self.model.email == email_or_username,
                 self.model.username == email_or_username)))
 
-        return await self.session.execute(query)
+        result = await self.session.execute(query)
+        return result.scalar_one_or_none()
