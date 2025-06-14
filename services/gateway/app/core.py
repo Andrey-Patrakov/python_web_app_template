@@ -43,6 +43,11 @@ def route(
                     method=method,
                     data=payload)
 
+                if service_status_code >= 400:
+                    raise HTTPException(
+                        detail=response_data.get('detail', 'Service error.'),
+                        status_code=service_status_code)
+
             except ClientConnectorError:
                 raise HTTPException(
                     status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
