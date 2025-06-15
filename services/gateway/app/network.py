@@ -17,4 +17,4 @@ async def make_request(
             request = getattr(session, method)
             async with request(url, json=data, headers=headers) as response:
                 data = await response.json()
-                return data, response.status
+                return data, response

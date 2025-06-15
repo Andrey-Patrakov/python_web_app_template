@@ -6,6 +6,9 @@ from aiohttp.client_exceptions import ClientConnectorError, ContentTypeError
 from .network import make_request
 
 
+SERVICE_HEADERS = ['Set-Cookie']
+
+
 def route(
         request_method,
         path: str,
@@ -37,16 +40,20 @@ def route(
             payload_obj = kwargs.get(payload_key)
             payload = payload_obj.dict() if payload_obj else {}
 
+            cookie = request.headers.get('cookie')
+            request_headers = {'cookie': cookie} if cookie else None
+
             try:
-                response_data, service_status_code = await make_request(
+                response_data, service_response = await make_request(
                     url=url,
                     method=method,
-                    data=payload)
+                    data=payload,
+                    headers=request_headers)
 
-                if service_status_code >= 400:
+                if service_response.status >= 400:
                     raise HTTPException(
                         detail=response_data.get('detail', 'Service error.'),
-                        status_code=service_status_code)
+                        status_code=service_response.status)
 
             except ClientConnectorError:
                 raise HTTPException(
@@ -60,7 +67,12 @@ def route(
                     detail='Service error.',
                     headers={'WWW-Authenticate': 'Bearer'})
 
-            response.status_code = service_status_code
+            response.status_code = service_response.status
+            for key, value in service_response.headers.items():
+                if key not in SERVICE_HEADERS:
+                    continue
+
+                response.headers.append(key, value)
 
             return response_data
 
