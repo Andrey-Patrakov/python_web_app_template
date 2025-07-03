@@ -18,7 +18,7 @@ services:
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME}-users
+      - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
 
@@ -26,12 +26,7 @@ services:
       - SECURE=${SECURE}
     volumes:
       - ./services/users:/app
-    command: >
-      bash -c "
-        alembic upgrade head &&
-        alembic revision --autogenerate &&
-        alembic upgrade head &&
-        uvicorn app.main:app --reload --host 0.0.0.0"
+    command: bash -c "uvicorn src.main:app --reload --host 0.0.0.0"
     depends_on:
       - database
     restart: unless-stopped

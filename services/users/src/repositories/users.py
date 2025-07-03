@@ -1,12 +1,12 @@
 from sqlalchemy import select, or_
 from database import SQLAlchemyRepository
-from .models import User
+from src.models.users import User
 
 
 class UserRepository(SQLAlchemyRepository):
     model = User
 
-    async def get_user(self, email_or_username: str) -> User:
+    async def get_by_username(self, email_or_username: str) -> User:
         query = (
             select(self.model)
             .filter(or_(
