@@ -2,6 +2,7 @@ from fastapi import Request, Response, HTTPException, status
 
 from src.models.users import User
 from src.schemas.users import UserRegisterForm, UserLoginForm
+from src.schemas.users import UserUpdateForm
 from src.utils.password import get_password_hash, verify_password
 from src.services.unit_of_work import UnitOfWork
 from src.services.auth import AuthService
@@ -66,3 +67,14 @@ class UsersService:
     async def get_user_by_id(self, user_id: int) -> User:
         async with UnitOfWork() as uow:
             return await uow.users.read_one(id=user_id)
+
+    async def update_current(self, user_form: UserUpdateForm) -> User:
+        async with UnitOfWork() as uow:
+            user = await self.get_current_user()
+
+            form_data = user_form.model_dump()
+            if user_form.email != user.email:
+                form_data['is_verified'] = False
+
+            await uow.users.update(filter_by={'id': user.id}, **form_data)
+            return await uow.users.read_one(id=user.id)

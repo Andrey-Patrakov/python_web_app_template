@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from src.schemas.users import UserSchema, UserRegisterForm, UserLoginForm
+from src.schemas.users import UserUpdateForm
 from src.api.dependencies import UsersDep
 
 
@@ -16,6 +17,12 @@ async def get_user(id: int, users_service: UsersDep) -> UserSchema:
 @router.get('/')
 async def get_current_user(users_service: UsersDep) -> UserSchema:
     return await users_service.get_current_user()
+
+
+@router.put('/')
+async def update_current_user(
+        user_form: UserUpdateForm, users_service: UsersDep) -> UserSchema:
+    return await users_service.update_current(user_form)
 
 
 @router.post('/register')
