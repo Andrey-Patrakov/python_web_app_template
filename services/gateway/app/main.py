@@ -1,9 +1,18 @@
 from fastapi import FastAPI, Request, Response, status
 from .core import route
 from services.users.routes import router as users_router
+from fastapi.middleware.cors import CORSMiddleware
+from .config import get_allowed_hosts
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_allowed_hosts(),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],)
 
 
 @route(

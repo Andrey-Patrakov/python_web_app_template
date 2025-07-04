@@ -6,6 +6,9 @@ services:
     build: ./services/gateway
     environment:
       - SERVICES=${SERVICES}
+      - FRONTEND_HOST=${FRONTEND_HOST}
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
     ports:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}
     command: bash -c "uvicorn app.main:app --reload --host 0.0.0.0 --port ${GATEWAY_PORT}"
