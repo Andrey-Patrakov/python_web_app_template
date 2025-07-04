@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from src.schemas.users import UserSchema, UserRegisterForm, UserLoginForm
-from src.schemas.users import UserUpdateForm
+from src.schemas.users import UserUpdateForm, UserChangePasswordForm
 from src.api.dependencies import UsersDep
 
 
@@ -23,6 +23,13 @@ async def get_current_user(users_service: UsersDep) -> UserSchema:
 async def update_current_user(
         user_form: UserUpdateForm, users_service: UsersDep) -> UserSchema:
     return await users_service.update_current(user_form)
+
+
+@router.put('/change-password')
+async def change_password(
+        user_form: UserChangePasswordForm, users_service: UsersDep) -> dict:
+    await users_service.change_password(user_form)
+    return {'message': 'Password changed.'}
 
 
 @router.post('/register')

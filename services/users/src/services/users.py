@@ -2,7 +2,7 @@ from fastapi import Request, Response, HTTPException, status
 
 from src.models.users import User
 from src.schemas.users import UserRegisterForm, UserLoginForm
-from src.schemas.users import UserUpdateForm
+from src.schemas.users import UserUpdateForm, UserChangePasswordForm
 from src.utils.password import get_password_hash, verify_password
 from src.services.unit_of_work import UnitOfWork
 from src.services.auth import AuthService
@@ -78,3 +78,18 @@ class UsersService:
 
             await uow.users.update(filter_by={'id': user.id}, **form_data)
             return await uow.users.read_one(id=user.id)
+
+    async def change_password(self, pwd_form: UserChangePasswordForm):
+        async with UnitOfWork() as uow:
+            user = await self.get_current_user()
+
+            if not verify_password(
+                    plain_password=pwd_form.old_password,
+                    hashed_password=user.password):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail='Old password is wrong.')
+
+            await uow.users.update(
+                filter_by={'id': user.id},
+                password=get_password_hash(pwd_form.new_password))
