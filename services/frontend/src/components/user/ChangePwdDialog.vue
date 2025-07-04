@@ -96,16 +96,16 @@
 
 <script setup lang="ts">
 import rules from '@/rules';
-import { type PwdChangeInterface, useUserStore } from '@/stores/user';
+import { useUsers, type UserChangePasswordForm } from '@/stores/user';
 const $rules = rules();
-const user = useUserStore();
+const user = useUsers();
 
 const showDialog = defineModel<boolean>();
 const isValid = ref<boolean>(false);
 const errorMessage = ref<string>('');
 const password2 = ref<string>('');
 
-const pwdForm = ref<PwdChangeInterface>({
+const pwdForm = ref<UserChangePasswordForm>({
   old_password: '',
   new_password: '',
 });

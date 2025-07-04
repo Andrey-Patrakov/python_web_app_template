@@ -46,13 +46,13 @@
 <script lang="ts" setup>
 import router from '@/router';
 import { useMessagesStore } from '@/stores/messages';
-import { useUserStore } from '@/stores/user';
+import { useUsers } from '@/stores/user';
 
-const user = useUserStore();
+const user = useUsers();
 const messages = useMessagesStore();
 
 const checkVerification = async () => {
-  await user.viewMe();
+  await user.get_current();
   return user.is_verified;
 }
 
@@ -68,7 +68,7 @@ onMounted(async () => {
     verification.value = true;
     message.value = 'Выполняю подтверждение адреса электронной почты, ждите!';
     try {
-      message.value = await user.verifyEmail(query.token.toString());
+      // message.value = await user.verifyEmail(query.token.toString()); // TODO
       if (await checkVerification()) {
         message.value += ' Эту страницу можно закрыть.';
       }

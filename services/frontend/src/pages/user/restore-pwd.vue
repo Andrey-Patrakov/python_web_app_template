@@ -105,10 +105,10 @@
 <script lang="ts" setup>
 import rules from '@/rules';
 import { useMessagesStore } from '@/stores/messages';
-import { useUserStore, type SendRestoreMessageInterface, type RestorePasswordInterface } from '@/stores/user';
+import { useUsers, type UserSendRestoreMessageForm, type UserRestorePasswordForm } from '@/stores/user';
 
 const $rules = rules();
-const user = useUserStore();
+const user = useUsers();
 const router = useRouter();
 const messages = useMessagesStore();
 
@@ -117,13 +117,13 @@ const loading = ref(false);
 
 const showPwdDialog = ref(false);
 
-const restoreForm = ref<RestorePasswordInterface>({ token: '', new_password: '' });
+const restoreForm = ref<UserRestorePasswordForm>({ token: '', new_password: '' });
 const password2 = ref('');
 const changePassword = async () => {
   if (isValid.value) {
     loading.value = true;
     try {
-      await user.restorePassword(restoreForm.value);
+      // await user.restorePassword(restoreForm.value); // TODO
       messages.info('Пароль изменен успешно!');
       router.replace('/user/login');
     }
@@ -133,12 +133,12 @@ const changePassword = async () => {
   }
 }
 
-const sendMessageForm = ref<SendRestoreMessageInterface>({ email: '' });
+const sendMessageForm = ref<UserSendRestoreMessageForm>({ email: '' });
 const sendMessage = async () => {
   if (isValid.value) {
     loading.value = true;
     try {
-      await user.sendRestoreMessage(sendMessageForm.value);
+      // await user.sendRestoreMessage(sendMessageForm.value); // TODO
       messages.info('Письмо отправлено на указанный адрес электронной почты!');
       router.replace('/user/login');
     }

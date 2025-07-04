@@ -99,11 +99,11 @@
                   </template>
                 </v-hover>
                 <div hidden>
-                  <v-file-input
+                  <!-- <v-file-input
                     id="f-input"
                     accept="image/*"
                     @update:model-value="user.uploadAvatar"
-                  />
+                  /> --> <!-- TODO -->
                 </div>
               </v-col>
             </v-row>
@@ -169,12 +169,12 @@
 import changePwdDialog from '@/components/user/ChangePwdDialog.vue';
 
 import { ref } from 'vue';
-import { useUserStore, type UpdateInfoInterface } from '@/stores/user';
+import { useUsers, type UserUpdateForm } from '@/stores/user';
 import rules from '@/rules';
 import router from '@/router';
 import { useMessagesStore } from '@/stores/messages';
 
-const user = useUserStore();
+const user = useUsers();
 const $rules = rules();
 const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
@@ -210,19 +210,19 @@ const submit = async () => {
   }
 
   loading.value = true;
-  const info = <UpdateInfoInterface>{
+  const info = <UserUpdateForm>{
     email: userForm.value.email,
     username: userForm.value.username,
     description: userForm.value.description
   };
-  user.updateInfo(info);
+  user.updateCurrent(info);
   loading.value = false;
 
 };
 
 const verifyEmail = async () => {
   loading.value = true;
-  infoMessage.value = await user.sendMessage();
+  // infoMessage.value = await user.sendMessage(); // TODO
   router.push('/user/verify');
   loading.value = false;
 }
@@ -236,7 +236,7 @@ const isChanged = computed(() => {
 })
 
 onMounted(async() => {
-  await user.viewMe();
+  await user.get_current();
 })
 
 </script>

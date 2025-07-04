@@ -60,12 +60,12 @@
 
 <script lang="ts" setup>
 import router from '@/router';
-import { useUserStore } from '@/stores/user';
+import { useUsers } from '@/stores/user';
 import LinkList from '@/components/LinkList/LinkList.vue';
 import type ListNodeInteface from '../LinkList/listNodeInterface';
 import vuetify from '@/plugins/vuetify';
 
-const user = useUserStore();
+const user = useUsers();
 
 const showUserMenu = ref(false)
 const username = computed(() => {
@@ -98,7 +98,7 @@ router.afterEach(() => {
 });
 
 onMounted(() => {
-  user.viewMe();
+  user.get_current();
 });
 
 </script>
