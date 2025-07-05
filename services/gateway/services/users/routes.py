@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, Request, Response
-from app.core import route
-from app.config import settings
+from src.core import route
+from src.config import settings
 from .schemas import UserRegisterForm, UserLoginForm
 from .schemas import UserUpdateForm, UserChangePasswordForm
 
