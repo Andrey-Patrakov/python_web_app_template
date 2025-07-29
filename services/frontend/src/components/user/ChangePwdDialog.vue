@@ -9,9 +9,9 @@
       @submit.prevent="submit"
     >
       <v-card width="600">
-        <v-card-title>
-          <v-card-actions>
-            Смена пароля            
+        <v-container>
+          <v-card-title class="d-flex">
+            Смена пароля
             <v-btn
               variant="elevated"
               color="red-lighten-2"
@@ -23,72 +23,71 @@
             >
               <v-icon icon="mdi mdi-window-close" />
             </v-btn>
+          </v-card-title>
+
+          <v-card-text>
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="pwdForm.old_password"
+                  label="Старый пароль"
+                  :rules="[$rules.requred, $rules.password]"
+                  type="password"
+                />
+              </v-col>
+            </v-row>
+  
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="pwdForm.new_password"
+                  label="Новый пароль"
+                  :rules="[$rules.requred, $rules.password, equalPasswords(pwdForm.old_password)]"
+                  type="password"
+                  @input="password2=''"
+                />
+              </v-col>
+            </v-row>
+  
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="password2"
+                  label="Повторите пароль"
+                  :rules="[$rules.requred, $rules.passwordRepeat(pwdForm.new_password)]"
+                  type="password"
+                />
+              </v-col>
+            </v-row>
+  
+            <v-row v-if="errorMessage">
+              <v-col>
+                <div class="text-red-darken-4 text-body-2">
+                  {{ errorMessage }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-card-text>
+  
+          <v-card-actions>
+            <v-btn
+              size="large"
+              color="green-lighten-1"
+              class="ml-auto"
+              @click="clear"
+            >
+              Очистить
+            </v-btn>
+            <v-btn
+              type="submit"
+              variant="elevated"
+              size="large"
+              color="green-lighten-1"
+            >
+              Подтвердить
+            </v-btn>
           </v-card-actions>
-        </v-card-title>
-        
-        <v-card-text>
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="pwdForm.old_password"
-                label="Старый пароль"
-                :rules="[$rules.requred, $rules.password]"
-                type="password"
-              />
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="pwdForm.new_password"
-                label="Новый пароль"
-                :rules="[$rules.requred, $rules.password, equalPasswords(pwdForm.old_password)]"
-                type="password"
-                @input="password2=''"
-              />
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="password2"
-                label="Повторите пароль"
-                :rules="[$rules.requred, $rules.passwordRepeat(pwdForm.new_password)]"
-                type="password"
-              />
-            </v-col>
-          </v-row>
-
-          <v-row v-if="errorMessage">
-            <v-col>
-              <div class="text-red-darken-4 text-body-2">
-                {{ errorMessage }}
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-
-        <v-divider />
-        <v-card-actions>
-          <v-btn
-            size="large"
-            color="green-lighten-1"
-            class="ml-auto"
-            @click="clear"
-          >
-            Очистить
-          </v-btn>
-          <v-btn
-            type="submit"
-            variant="elevated"
-            size="large"
-            color="green-lighten-1"
-          >
-            Подтвердить
-          </v-btn>
-        </v-card-actions>
+        </v-container>
       </v-card>
     </v-form>
   </v-dialog>
