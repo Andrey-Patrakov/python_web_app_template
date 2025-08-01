@@ -47,6 +47,10 @@ export interface UserRestorePasswordForm {
   new_password: string,
 }
 
+export interface UserConfirmForm {
+  token: string,
+}
+
 export const useUsers = defineStore('user', {
   state: (): UserState => ({
     email: null,
@@ -102,17 +106,17 @@ export const useUsers = defineStore('user', {
       this.clear();
     },
 
+    async verifyEmail() {
+      await axios.post(`${USERS_API_PATH}/verify-email`);
+    },
+
+    async confirm(confirm_form: UserConfirmForm) {
+      await axios.post(`${USERS_API_PATH}/confirm`, confirm_form);
+    },
+
     // async sendMessage() {
     //   let message = '';
     //   await axios.post('/user/send_message').then((res) => {
-    //     message = res.data.message;
-    //   });
-    //   return message;
-    // },
-
-    // async verifyEmail(token: string) {
-    //   let message = '';
-    //   await axios.post('/user/verify_email', {token}).then((res) => {
     //     message = res.data.message;
     //   });
     //   return message;

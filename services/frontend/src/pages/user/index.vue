@@ -178,7 +178,6 @@ const user = useUsers();
 const $rules = rules();
 const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
-const infoMessage = ref<string>('');
 const messages = useMessagesStore();
 const loading = ref(false);
 
@@ -222,8 +221,8 @@ const submit = async () => {
 
 const verifyEmail = async () => {
   loading.value = true;
-  // infoMessage.value = await user.sendMessage(); // TODO
-  router.push('/user/verify');
+  await user.verifyEmail();
+  router.push('/user/verify-email');
   loading.value = false;
 }
 

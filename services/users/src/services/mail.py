@@ -31,7 +31,7 @@ class EmailService:
         frontend_url = urlparse(
             f'{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}')
 
-        path = 'user/confirmation'
+        path = 'user/confirm'
         link = urlunsplit((
             frontend_url.scheme, frontend_url.netloc, path,
             urlencode({'token': token_str}), ''))
