@@ -24,6 +24,10 @@ class UserChangePasswordForm(BaseModel):
     new_password: str = Field(..., min_length=5, max_length=50, description='Новый пароль') # noqa
 
 
+class UserConfirmForm(BaseModel):
+    token: str = Field(..., description='Токен, который был отправлен на почту') # noqa
+
+
 class UserSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

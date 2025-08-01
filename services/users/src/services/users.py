@@ -93,3 +93,7 @@ class UsersService:
             await uow.users.update(
                 filter_by={'id': user.id},
                 password=get_password_hash(pwd_form.new_password))
+
+    async def verify_email(self, user_id: int):
+        async with UnitOfWork() as uow:
+            await uow.users.update(is_verified=True, filter_by={"id": user_id})

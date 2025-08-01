@@ -43,16 +43,18 @@ class AuthService:
         try:
             try:
                 token = access_token.read()
-            except TokenExpiredError:
-                await self.refresh_access_token()
+                user_id = int(access_token.get('sub'))
 
-            token = access_token.read()
+            except TokenExpiredError:
+                token = await self.refresh_access_token()
+                user_id = int(access_token.decode(token).get('sub'))
+
             if await TokenService().exists(token):
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail='User is unauthorized.')
 
-            return int(access_token.get('sub'))
+            return user_id
 
         except TokenError:
             raise HTTPException(

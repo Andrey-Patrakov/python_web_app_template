@@ -3,6 +3,7 @@ from src.core import route
 from src.config import settings
 from .schemas import UserRegisterForm, UserLoginForm
 from .schemas import UserUpdateForm, UserChangePasswordForm
+from .schemas import UserConfirmForm
 
 
 router = APIRouter(prefix='/api/users', tags=['Авторизация и аутентификация'])
@@ -88,4 +89,27 @@ async def login(user_form: UserLoginForm,
     service_url=settings.SERVICES['users']['url'],
     response_model=None)
 async def logout(request: Request, response: Response):
+    pass
+
+
+@route(
+    request_method=router.post,
+    path='/verify-email',
+    status_code=status.HTTP_200_OK,
+    payload_key=None,
+    service_url=settings.SERVICES['users']['url'],
+    response_model=None)
+async def verify_email(request: Request, response: Response):
+    pass
+
+
+@route(
+    request_method=router.post,
+    path='/confirm',
+    status_code=status.HTTP_200_OK,
+    payload_key='confirm_form',
+    service_url=settings.SERVICES['users']['url'],
+    response_model=None)
+async def confirm(confirm_form: UserConfirmForm,
+                  request: Request, response: Response):
     pass
