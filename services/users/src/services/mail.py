@@ -25,11 +25,6 @@ class EmailService:
                 link=link,
                 sitename=sitename))
 
-            print(self._create_message(
-                template='verify_email.html',
-                link=link,
-                sitename=sitename))
-
             message.send()
 
     async def _get_confirmation_url(self, token_str: str):
