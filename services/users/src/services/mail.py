@@ -27,6 +27,20 @@ class EmailService:
 
             message.send()
 
+    async def send_restore_password_message(self, user: User, token: Token):
+        link, sitename = await self._get_confirmation_url(token.token)
+        with SMTP_Mail() as mail:
+            message = mail.message(
+                addr_to=user.email,
+                subject='Восстановление пароля')
+
+            message.attach_html(self._create_message(
+                template='restore_pwd.html',
+                link=link,
+                sitename=sitename))
+
+            message.send()
+
     async def _get_confirmation_url(self, token_str: str):
         frontend_url = urlparse(
             f'{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}')

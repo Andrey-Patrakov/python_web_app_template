@@ -3,7 +3,7 @@ from src.core import route
 from src.config import settings
 from .schemas import UserRegisterForm, UserLoginForm
 from .schemas import UserUpdateForm, UserChangePasswordForm
-from .schemas import UserConfirmForm
+from .schemas import UserConfirmForm, UserResporePasswordForm
 
 
 router = APIRouter(prefix='/api/users', tags=['Авторизация и аутентификация'])
@@ -100,6 +100,19 @@ async def logout(request: Request, response: Response):
     service_url=settings.SERVICES['users']['url'],
     response_model=None)
 async def verify_email(request: Request, response: Response):
+    pass
+
+
+@route(
+    request_method=router.post,
+    path='/restore-password',
+    status_code=status.HTTP_200_OK,
+    payload_key='restore_pwd_form',
+    service_url=settings.SERVICES['users']['url'],
+    response_model=None)
+async def restore_password(
+        restore_pwd_form: UserResporePasswordForm,
+        request: Request, response: Response):
     pass
 
 

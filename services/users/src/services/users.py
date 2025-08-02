@@ -68,6 +68,10 @@ class UsersService:
         async with UnitOfWork() as uow:
             return await uow.users.read_one(id=user_id)
 
+    async def get_user_by_email(self, email: str) -> User:
+        async with UnitOfWork() as uow:
+            return await uow.users.get_by_username(email)
+
     async def update_current(self, user_form: UserUpdateForm) -> User:
         async with UnitOfWork() as uow:
             user = await self.get_current_user()
@@ -97,3 +101,9 @@ class UsersService:
     async def verify_email(self, user_id: int):
         async with UnitOfWork() as uow:
             await uow.users.update(is_verified=True, filter_by={"id": user_id})
+
+    async def resore_password(self, user_id: int, new_password: str):
+        async with UnitOfWork() as uow:
+            await uow.users.update(
+                filter_by={'id': user_id},
+                password=get_password_hash(new_password))

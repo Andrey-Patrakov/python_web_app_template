@@ -5,7 +5,7 @@ from src.config import settings
 
 from src.schemas.users import UserSchema, UserRegisterForm, UserLoginForm
 from src.schemas.users import UserUpdateForm, UserChangePasswordForm
-from src.schemas.users import UserConfirmForm
+from src.schemas.users import UserConfirmForm, UserResporePasswordForm
 from src.schemas.tokens import TokenTypes
 from src.api.dependencies import UsersDep, EmailDep, TokenDep
 
@@ -72,6 +72,23 @@ async def verify_email(
     return {'message': 'Email verification message sent'}
 
 
+@router.post('/restore-password')
+async def restore_password(
+        restore_pwd_form: UserResporePasswordForm,
+        users_service: UsersDep,
+        email_service: EmailDep,
+        token_service: TokenDep):
+
+    user = await users_service.get_user_by_email(restore_pwd_form.email)
+    token = await token_service.create(
+            user_id=user.id,
+            expires_delta=timedelta(minutes=settings.LINK_EXPIRE_MINUTES),
+            token_type=TokenTypes.PASSWORD_RESTORE)
+
+    await email_service.send_restore_password_message(user, token)
+    return {'message': 'Password restore message sent'}
+
+
 @router.post('/confirm')
 async def confirm(
         confirm_form: UserConfirmForm,
@@ -88,6 +105,17 @@ async def confirm(
     if token.token_type == TokenTypes.VERIFICATION:
         await users_service.verify_email(token.user_id)
         return {'message': 'Email is verified'}
+
+    if token.token_type == TokenTypes.PASSWORD_RESTORE:
+        if not confirm_form.password:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail='Password field is empty in form')
+
+        await users_service.resore_password(
+            user_id=token.user_id,
+            new_password=confirm_form.password)
+        return {'message': 'Password changed'}
 
     raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
