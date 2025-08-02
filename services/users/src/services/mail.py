@@ -14,7 +14,7 @@ class EmailService:
         pass
 
     async def send_email_verification_message(self, user: User, token: Token):
-        link, sitename = await self._get_confirmation_url(token.token)
+        link, sitename = await self._get_confirmation_url(token.token, 'evf')
         with SMTP_Mail() as mail:
             message = mail.message(
                 addr_to=user.email,
@@ -28,7 +28,7 @@ class EmailService:
             message.send()
 
     async def send_restore_password_message(self, user: User, token: Token):
-        link, sitename = await self._get_confirmation_url(token.token)
+        link, sitename = await self._get_confirmation_url(token.token, 'rpwd')
         with SMTP_Mail() as mail:
             message = mail.message(
                 addr_to=user.email,
@@ -41,14 +41,14 @@ class EmailService:
 
             message.send()
 
-    async def _get_confirmation_url(self, token_str: str):
+    async def _get_confirmation_url(self, token_str: str, token_type: str):
         frontend_url = urlparse(
             f'{settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}')
 
         path = 'user/confirm'
         link = urlunsplit((
             frontend_url.scheme, frontend_url.netloc, path,
-            urlencode({'token': token_str}), ''))
+            urlencode({'token': token_str, 'type': token_type}), ''))
 
         return link, frontend_url.netloc
 

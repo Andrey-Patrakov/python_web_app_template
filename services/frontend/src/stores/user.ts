@@ -38,17 +38,13 @@ export interface UserChangePasswordForm {
   new_password: string,
 }
 
-export interface UserSendRestoreMessageForm {
-  email: string,
-}
-
 export interface UserRestorePasswordForm {
-  token: string,
-  new_password: string,
+  email: string,
 }
 
 export interface UserConfirmForm {
   token: string,
+  password: string | undefined
 }
 
 export const useUsers = defineStore('user', {
@@ -108,6 +104,10 @@ export const useUsers = defineStore('user', {
 
     async verifyEmail() {
       await axios.post(`${USERS_API_PATH}/verify-email`);
+    },
+
+    async restorePassword(restorePasswordForm: UserRestorePasswordForm) {
+      await axios.post(`${USERS_API_PATH}/restore-password`, restorePasswordForm);
     },
 
     async confirm(confirm_form: UserConfirmForm) {
