@@ -10,3 +10,5 @@ database @ git+https://github.com/Andrey-Patrakov/app-common-db-package.git#egg=
 
 aiohttp==3.12.7
 aiodns==3.4.0
+
+minio==7.2.15

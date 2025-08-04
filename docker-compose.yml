@@ -6,6 +6,8 @@ services:
     build: ./services/gateway
     environment:
       - SERVICES=${SERVICES}
+      - REGION_NAME=${REGION_NAME}
+
       - FRONTEND_HOST=${FRONTEND_HOST}
       - FRONTEND_PORT=${FRONTEND_PORT}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
@@ -15,6 +17,11 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
+
+      - STORAGE_URL=storage:9000
+      - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - STORAGE_BUCKET=${MINIO_BUCKET_NAME}
     ports:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}
     command: >
