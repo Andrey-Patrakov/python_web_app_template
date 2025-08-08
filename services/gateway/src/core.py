@@ -1,9 +1,10 @@
 import functools
 from importlib import import_module
 from fastapi import Request, Response, HTTPException, status
+from starlette.datastructures import UploadFile
 from aiohttp.client_exceptions import ClientConnectorError, ContentTypeError
 
-from .network import make_request
+from .network import make_request, get_file_writer
 
 
 SERVICE_HEADERS = ['Set-Cookie']
@@ -38,17 +39,20 @@ def route(
             url = f'{service_url}{path}'
 
             payload_obj = kwargs.get(payload_key)
-            payload = payload_obj.dict() if payload_obj else {}
-
-            cookie = request.headers.get('cookie')
-            request_headers = {'cookie': cookie} if cookie else None
+            if type(payload_obj) is UploadFile:
+                writer = get_file_writer(file=payload_obj, name=payload_key)
+                payload = None
+            else:
+                writer = None
+                payload = payload_obj.dict() if payload_obj else {}
 
             try:
                 response_data, service_response = await make_request(
                     url=url,
                     method=method,
-                    data=payload,
-                    headers=request_headers)
+                    json_data=payload,
+                    data=writer,
+                    cookies=request.cookies)
 
                 if service_response.status >= 400:
                     raise HTTPException(
