@@ -12,3 +12,4 @@ aiohttp==3.12.7
 aiodns==3.4.0
 
 minio==7.2.15
+storage @ git+https://github.com/Andrey-Patrakov/app-common-storage-package.git#egg=storage

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-from .utils import download_from_storage
+from storage import Storage
 
 
 router = APIRouter(prefix='/api', tags=['Работа с хранилищем'])
@@ -8,6 +8,7 @@ router = APIRouter(prefix='/api', tags=['Работа с хранилищем'])
 
 @router.get('/download/{name}')
 def download(name: str) -> StreamingResponse:
+    storage = Storage()
     return StreamingResponse(
-        download_from_storage(name=name),
+        storage.download(name),
         media_type='application/octet-stream')

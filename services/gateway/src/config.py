@@ -1,21 +1,8 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class SettingsStorage(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix='STORAGE_')
-
-    URL: str
-    BUCKET: str
-    ACCESS_KEY: str
-    SECRET_KEY: str
-    FILE_MAX_LENGTH: int = 256 * 1024**2
-    CHUNK_SIZE: int = 524288
-
-
 class Settings(BaseSettings):
     model_config = SettingsConfigDict()
-
-    storage: SettingsStorage = SettingsStorage()
 
     GATEWAY_TIMEOUT: int = 59
     REGION_NAME: str = 'ru-moscow'
@@ -24,6 +11,8 @@ class Settings(BaseSettings):
     FRONTEND_HOST: str
     FRONTEND_PORT: str
     ALLOWED_HOSTS: list[str] = []
+
+    FILE_MAX_LENGTH: int = 256 * 1024**2
 
 
 settings = Settings()

@@ -20,7 +20,7 @@ app.add_middleware(
 
 app.add_middleware(
     ContentSizeLimitMiddleware,
-    max_content_size=settings.storage.FILE_MAX_LENGTH)
+    max_content_size=settings.FILE_MAX_LENGTH)
 
 
 app.include_router(storage_router)

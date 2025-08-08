@@ -1,10 +1,9 @@
 from contextlib import asynccontextmanager
-from services.storage.utils import make_bucket
-from src.config import settings
+from storage import Storage
 
 
 def on_start(app):
-    make_bucket(settings.storage.BUCKET)
+    Storage().make_bucket()
 
 
 def on_finish(app):
