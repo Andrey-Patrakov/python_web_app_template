@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
+from fastapi import UploadFile, File
 from datetime import timedelta
 
 from src.config import settings
@@ -120,3 +121,12 @@ async def confirm(
     raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Token not found')
+
+
+@router.put('/avatar')
+async def change_avatar(
+        users_service: UsersDep,
+        file: UploadFile = File()):
+
+    await users_service.change_avatar(file)
+    return {'message': 'Avatar changed'}

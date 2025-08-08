@@ -56,6 +56,11 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_SSL_REQUIRED=${SMTP_SSL_REQUIRED}
+
+      - STORAGE_URL=storage:9000
+      - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - STORAGE_BUCKET=${MINIO_BUCKET_NAME}
     volumes:
       - ./services/users:/app
     command: bash -c "uvicorn src.main:app --reload --host 0.0.0.0"

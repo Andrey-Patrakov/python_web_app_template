@@ -1,4 +1,5 @@
 from fastapi import APIRouter, status, Request, Response
+from fastapi import UploadFile
 from src.core import route
 from src.config import settings
 from .schemas import UserRegisterForm, UserLoginForm
@@ -125,4 +126,16 @@ async def restore_password(
     response_model=None)
 async def confirm(confirm_form: UserConfirmForm,
                   request: Request, response: Response):
+    pass
+
+
+@route(
+    request_method=router.put,
+    path='/avatar',
+    status_code=status.HTTP_200_OK,
+    payload_key='file',
+    service_url=settings.SERVICES['users']['url'],
+    response_model=None)
+async def change_avatar(file: UploadFile,
+                        request: Request, response: Response):
     pass

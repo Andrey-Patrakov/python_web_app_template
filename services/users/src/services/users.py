@@ -1,4 +1,9 @@
 from fastapi import Request, Response, HTTPException, status
+from fastapi import UploadFile
+from storage import Storage
+
+from PIL import Image
+from io import BytesIO
 
 from src.models.users import User
 from src.schemas.users import UserRegisterForm, UserLoginForm
@@ -107,3 +112,45 @@ class UsersService:
             await uow.users.update(
                 filter_by={'id': user_id},
                 password=get_password_hash(new_password))
+
+    async def change_avatar(self, file: UploadFile):
+        storage = Storage()
+        user = await self.get_current_user()
+
+        try:
+            image_io = BytesIO()
+            image = Image.open(file.file)
+
+            center_x = image.size[0] // 2
+            center_y = image.size[1] // 2
+            min_size = min(image.size) // 2
+
+            image = image.crop((
+                center_x - min_size,
+                center_y - min_size,
+                center_x + min_size,
+                center_y + min_size))
+
+            image.thumbnail((256, 256))
+            image.save(image_io, 'PNG', quality=50)
+            image_io.seek(0)
+
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                detail='Failed to process image!')
+
+        async with UnitOfWork() as uow:
+
+            await uow.users.update(
+                avatar=None, filter_by={'id': user.id})
+
+            if user.avatar:
+                storage.delete(user.avatar)
+
+            storage_id = storage.upload(
+                file=image_io,
+                length=image_io.getbuffer().nbytes)
+
+            await uow.users.update(
+                avatar=storage_id, filter_by={'id': user.id})
