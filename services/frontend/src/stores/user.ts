@@ -68,7 +68,7 @@ export const useUsers = defineStore('user', {
         this.is_verified = res.data.is_verified;
         this.isAuthenticated = true;
         this.created_at = new Date(res.data.created_at);
-        this.avatar = null; // res.data.avatar ? await getFileLink(res.data.avatar) : null; // TODO
+        this.avatar = res.data.avatar ? await getFileLink(res.data.avatar) : null;
       }).catch((error) => {
         if (error.status != 401) {
           showApiErrorMessage(error);
@@ -114,40 +114,16 @@ export const useUsers = defineStore('user', {
       await axios.post(`${USERS_API_PATH}/confirm`, confirm_form);
     },
 
-    // async sendMessage() {
-    //   let message = '';
-    //   await axios.post('/user/send_message').then((res) => {
-    //     message = res.data.message;
-    //   });
-    //   return message;
-    // },
-
-    // async uploadAvatar(file:File | File[]) {
-    //   const form = new FormData();
-    //   if (file instanceof File) {
-    //     form.append('file', file);
-    //   } else {
-    //     form.append('file', file[0]);
-    //   }
-    //   await axios.post('user/change_avatar', form);
-    //   this.get_current();
-    // },
-
-    // async sendRestoreMessage(send_message_form: SendRestoreMessageInterface) {
-    //   let message = '';
-    //   await axios.post('user/send_restore_message', send_message_form).then((res) => {
-    //     message = res.data.message;
-    //   });
-    //   return message;
-    // },
-
-    // async restorePassword(form: RestorePasswordInterface) {
-    //   let message = '';
-    //   await axios.post('user/restore_password', form).then((res) => {
-    //     message = res.data.message;
-    //   });
-    //   return message;
-    // },
+    async uploadAvatar(file:File | File[]) {
+      const form = new FormData();
+      if (file instanceof File) {
+        form.append('file', file);
+      } else {
+        form.append('file', file[0]);
+      }
+      await axios.put(`${USERS_API_PATH}/avatar`, form);
+      this.get_current();
+    },
 
     clear() {
       this.$reset();

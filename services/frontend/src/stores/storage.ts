@@ -47,7 +47,7 @@ export const getFileLink = async (
     on_progress: null | ((progress: number) => void) = null) => {
 
   let url = '';
-  await axios.get(`storage/download/${storage_id}`, {
+  await axios.get(`api/download/${storage_id}`, {
     responseType: 'blob',
     onDownloadProgress: (itemDownload) => {
       if (on_progress && file_size > 0) {

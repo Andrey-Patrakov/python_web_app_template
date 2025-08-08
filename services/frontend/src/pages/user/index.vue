@@ -99,11 +99,11 @@
                   </template>
                 </v-hover>
                 <div hidden>
-                  <!-- <v-file-input
+                  <v-file-input
                     id="f-input"
                     accept="image/*"
                     @update:model-value="user.uploadAvatar"
-                  /> --> <!-- TODO -->
+                  />
                 </div>
               </v-col>
             </v-row>
