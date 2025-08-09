@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     FRONTEND_PORT: str
     ALLOWED_HOSTS: list[str] = []
 
+    USERS_SERVICE_PREFIX: str = '/api/users'
+
     FILE_MAX_LENGTH: int = 256 * 1024**2
 
 

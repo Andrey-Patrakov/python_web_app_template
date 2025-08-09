@@ -5,6 +5,7 @@ from starlette.datastructures import UploadFile
 from aiohttp.client_exceptions import ClientConnectorError, ContentTypeError
 
 from .network import make_request, get_file_writer
+from src.config import settings
 
 
 SERVICE_HEADERS = ['Set-Cookie']
@@ -17,7 +18,8 @@ def route(
         payload_key: str,
         service_url: str,
         response_model: str = None,
-        response_list: bool = False):
+        response_list: bool = False,
+        authentication_required: bool = False):
 
     if response_model:
         response_model = import_function(response_model)
@@ -45,6 +47,22 @@ def route(
             else:
                 writer = None
                 payload = payload_obj.dict() if payload_obj else {}
+
+            if authentication_required:
+                user_service_url = settings.SERVICES['users']['url']
+                users_data, users_response = await make_request(
+                    url=f'{user_service_url}{settings.USERS_SERVICE_PREFIX}/',
+                    method='get',
+                    cookies=request.cookies,
+                    json_data={})
+
+                if users_response.status >= 400:
+                    raise HTTPException(
+                        detail=users_data.get('detail', 'Service error.'),
+                        status_code=users_response.status)
+
+                if payload is not None:
+                    payload = payload | users_data
 
             try:
                 response_data, service_response = await make_request(

@@ -6,8 +6,9 @@ from .schemas import UserRegisterForm, UserLoginForm
 from .schemas import UserUpdateForm, UserChangePasswordForm
 from .schemas import UserConfirmForm, UserResporePasswordForm
 
-
-router = APIRouter(prefix='/api/users', tags=['Авторизация и аутентификация'])
+router = APIRouter(
+    prefix=settings.USERS_SERVICE_PREFIX,
+    tags=['Авторизация и аутентификация'])
 
 
 @route(
@@ -16,7 +17,8 @@ router = APIRouter(prefix='/api/users', tags=['Авторизация и аут�
     status_code=status.HTTP_200_OK,
     payload_key=None,
     service_url=settings.SERVICES['users']['url'],
-    response_model='services.users.schemas.UserSchema')
+    response_model='services.users.schemas.UserSchema',
+    authentication_required=True)
 async def get_user(id: int, request: Request, response: Response):
     pass
 
