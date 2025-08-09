@@ -82,7 +82,6 @@ const menu = computed(() => {
     return <ListNodeInteface[]>[
       {icon: 'mdi-home', title: 'Домой', link: '/'},
       {icon: 'mdi-account-edit', title: user.username, link: '/user'},
-      {icon: 'mdi-view-dashboard', title: 'Панель инструментов', link: '/dashboard'},
       {icon: 'mdi-logout', title: 'Выход', click: logout},
     ];
   }

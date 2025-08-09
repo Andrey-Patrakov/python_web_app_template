@@ -19,7 +19,6 @@
           Vuetify
         </h1>
 
-        <h2>{{ content }}</h2>
       </div>
 
       <div class="py-4" />
@@ -165,26 +164,4 @@
 </script>
 
 <script lang="ts">
-import axios from 'axios';
-export default {
-  data() {
-    return {
-      content: '',
-    }
-  },
-  created() {
-    this.getMessage();
-  },
-  methods: {
-    getMessage() {
-      axios.get('/')
-        .then((res) => {
-          this.content = res.data.message;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  },
-}
 </script>
