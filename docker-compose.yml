@@ -90,8 +90,6 @@ services:
       - MINIO_REGION_NAME=${REGION_NAME}
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
-      - MINIO_SECRET_KEY${MINIO_SECRET_KEY}
     command: server --console-address :9001 /data
     restart: unless-stopped
 
