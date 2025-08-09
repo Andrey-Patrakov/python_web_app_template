@@ -35,7 +35,7 @@
                       v-model="userForm.username"
                       variant="outlined"
                       label="Имя пользователя"
-                      :rules="[$rules.requred, $rules.username]"
+                      :rules="[rules.requred, rules.username]"
                     />
                   </v-col>
                 </v-row>
@@ -48,7 +48,7 @@
                       label="E-mail"
                       :prepend-inner-icon="user.is_verified ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline'"
                       :append-inner-icon="user.is_verified || isChanged ? '' : 'mdi-send'"
-                      :rules="[$rules.requred, $rules.email]"
+                      :rules="[rules.requred, rules.email]"
                       @click:append-inner="verifyEmail"
                     />
                     <v-btn
@@ -169,16 +169,15 @@
 import changePwdDialog from '@/components/user/ChangePwdDialog.vue';
 
 import { ref } from 'vue';
-import { useUserStore, type UpdateInfoInterface } from '@/stores/user';
-import rules from '@/rules';
+import { useUsers, type UserUpdateForm } from '@/stores/user';
+import { useRules } from '@/stores/rules';
 import router from '@/router';
 import { useMessagesStore } from '@/stores/messages';
 
-const user = useUserStore();
-const $rules = rules();
+const user = useUsers();
+const rules = useRules();
 const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
-const infoMessage = ref<string>('');
 const messages = useMessagesStore();
 const loading = ref(false);
 
@@ -210,20 +209,20 @@ const submit = async () => {
   }
 
   loading.value = true;
-  const info = <UpdateInfoInterface>{
+  const info = <UserUpdateForm>{
     email: userForm.value.email,
     username: userForm.value.username,
     description: userForm.value.description
   };
-  user.updateInfo(info);
+  user.updateCurrent(info);
   loading.value = false;
 
 };
 
 const verifyEmail = async () => {
   loading.value = true;
-  infoMessage.value = await user.sendMessage();
-  router.push('/user/verify');
+  await user.verifyEmail();
+  router.push('/user/verify-email');
   loading.value = false;
 }
 
@@ -236,7 +235,7 @@ const isChanged = computed(() => {
 })
 
 onMounted(async() => {
-  await user.viewMe();
+  await user.get_current();
 })
 
 </script>

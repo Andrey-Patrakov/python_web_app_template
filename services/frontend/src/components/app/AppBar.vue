@@ -60,12 +60,12 @@
 
 <script lang="ts" setup>
 import router from '@/router';
-import { useUserStore } from '@/stores/user';
+import { useUsers } from '@/stores/user';
 import LinkList from '@/components/LinkList/LinkList.vue';
 import type ListNodeInteface from '../LinkList/listNodeInterface';
 import vuetify from '@/plugins/vuetify';
 
-const user = useUserStore();
+const user = useUsers();
 
 const showUserMenu = ref(false)
 const username = computed(() => {
@@ -82,7 +82,6 @@ const menu = computed(() => {
     return <ListNodeInteface[]>[
       {icon: 'mdi-home', title: 'Домой', link: '/'},
       {icon: 'mdi-account-edit', title: user.username, link: '/user'},
-      {icon: 'mdi-view-dashboard', title: 'Панель инструментов', link: '/dashboard'},
       {icon: 'mdi-logout', title: 'Выход', click: logout},
     ];
   }
@@ -98,7 +97,7 @@ router.afterEach(() => {
 });
 
 onMounted(() => {
-  user.viewMe();
+  user.get_current();
 });
 
 </script>

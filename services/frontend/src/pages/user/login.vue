@@ -21,7 +21,7 @@
                     <v-text-field
                       v-model="userForm.email"
                       label="E-mail или имя пользователя"
-                      :rules="[$rules.requred, $rules.min_str_length(5)]"
+                      :rules="[rules.requred, rules.min_str_length(5)]"
                     />
                   </v-col>
                 </v-row>
@@ -31,7 +31,7 @@
                     <v-text-field
                       v-model="userForm.password"
                       label="Пароль"
-                      :rules="[$rules.requred, $rules.password]"
+                      :rules="[rules.requred, rules.password]"
                       type="password"
                     />
                   </v-col>
@@ -101,17 +101,17 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useUserStore, type LoginInterface } from '@/stores/user';
+import { useUsers, type UserLoginForm } from '@/stores/user';
 import router from '@/router';
-import rules from '@/rules';
+import { useRules } from '@/stores/rules';
 
-const user = useUserStore();
+const user = useUsers();
 
-const $rules = rules();
+const rules = useRules();
 const isValid = ref<boolean>(false);
 const errorMessage = ref<string>('');
 
-const userForm = ref<LoginInterface>({
+const userForm = ref<UserLoginForm>({
   email: '',
   password: '',
 });

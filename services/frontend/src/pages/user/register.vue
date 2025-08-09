@@ -21,7 +21,7 @@
                     <v-text-field
                       v-model="userForm.username"
                       label="Имя пользователя"
-                      :rules="[$rules.requred, $rules.username]"
+                      :rules="[rules.requred, rules.username]"
                     />
                   </v-col>
                 </v-row>
@@ -31,7 +31,7 @@
                     <v-text-field
                       v-model="userForm.email"
                       label="E-mail"
-                      :rules="[$rules.requred, $rules.email]"
+                      :rules="[rules.requred, rules.email]"
                     />
                   </v-col>
                 </v-row>
@@ -41,7 +41,7 @@
                     <v-text-field
                       v-model="userForm.password"
                       label="Пароль"
-                      :rules="[$rules.requred, $rules.password]"
+                      :rules="[rules.requred, rules.password]"
                       type="password"
                       @input="password2=''"
                     />
@@ -53,7 +53,7 @@
                     <v-text-field
                       v-model="password2"
                       label="Повторите пароль"
-                      :rules="[$rules.requred, $rules.passwordRepeat(userForm.password)]"
+                      :rules="[rules.requred, rules.passwordRepeat(userForm.password)]"
                       type="password"
                     />
                   </v-col>
@@ -110,17 +110,17 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import router from '@/router';
-import { useUserStore, type RegisterInterface } from '@/stores/user';
-import rules from '@/rules';
+import { useUsers, type UserRegisterForm } from '@/stores/user';
+import { useRules } from '@/stores/rules';
 
-const user = useUserStore();
-const $rules = rules();
+const user = useUsers();
+const rules = useRules();
 
 const isValid = ref<boolean>(false);
 const errorMessage = ref<string>('');
 const password2 = ref<string>('');
 
-const userForm = ref<RegisterInterface>({
+const userForm = ref<UserRegisterForm>({
   email: '',
   username: '',
   password: '',
