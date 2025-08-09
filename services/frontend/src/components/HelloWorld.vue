@@ -18,7 +18,6 @@
         <h1 class="text-h2 font-weight-bold">
           Vuetify
         </h1>
-
       </div>
 
       <div class="py-4" />
@@ -160,8 +159,4 @@
 </template>
 
 <script setup lang="ts">
-  //
-</script>
-
-<script lang="ts">
 </script>

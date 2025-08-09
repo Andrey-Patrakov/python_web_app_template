@@ -31,7 +31,7 @@
                 <v-text-field
                   v-model="pwdForm.old_password"
                   label="Старый пароль"
-                  :rules="[$rules.requred, $rules.password]"
+                  :rules="[rules.requred, rules.password]"
                   type="password"
                 />
               </v-col>
@@ -42,7 +42,7 @@
                 <v-text-field
                   v-model="pwdForm.new_password"
                   label="Новый пароль"
-                  :rules="[$rules.requred, $rules.password, equalPasswords(pwdForm.old_password)]"
+                  :rules="[rules.requred, rules.password, equalPasswords(pwdForm.old_password)]"
                   type="password"
                   @input="password2=''"
                 />
@@ -54,7 +54,7 @@
                 <v-text-field
                   v-model="password2"
                   label="Повторите пароль"
-                  :rules="[$rules.requred, $rules.passwordRepeat(pwdForm.new_password)]"
+                  :rules="[rules.requred, rules.passwordRepeat(pwdForm.new_password)]"
                   type="password"
                 />
               </v-col>
@@ -94,9 +94,9 @@
 </template>
 
 <script setup lang="ts">
-import rules from '@/rules';
+import { useRules } from '@/stores/rules';
 import { useUsers, type UserChangePasswordForm } from '@/stores/user';
-const $rules = rules();
+const rules = useRules();
 const user = useUsers();
 
 const showDialog = defineModel<boolean>();

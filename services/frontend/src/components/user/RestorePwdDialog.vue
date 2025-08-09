@@ -18,7 +18,7 @@
               <v-text-field
                 v-model="confirmForm.password"
                 label="Новый пароль"
-                :rules="[$rules.requred, $rules.password]"
+                :rules="[rules.requred, rules.password]"
                 type="password"
                 @input="password2=''"
               />
@@ -30,7 +30,7 @@
               <v-text-field
                 v-model="password2"
                 label="Повторите пароль"
-                :rules="[$rules.requred, $rules.passwordRepeat(confirmForm.password || '')]"
+                :rules="[rules.requred, rules.passwordRepeat(confirmForm.password || '')]"
                 type="password"
               />
             </v-col>
@@ -53,11 +53,11 @@
 </template>
 
 <script lang="ts" setup>
-import rules from '@/rules';
+import { useRules } from '@/stores/rules';
 import { useMessagesStore } from '@/stores/messages';
 import { useUsers, type UserConfirmForm } from '@/stores/user';
 
-const $rules = rules();
+const rules = useRules();
 const user = useUsers();
 const router = useRouter();
 const messages = useMessagesStore();

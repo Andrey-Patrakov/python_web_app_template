@@ -27,7 +27,7 @@
                 <v-text-field
                   v-model="restorePasswordForm.email"
                   label="E-mail"
-                  :rules="[$rules.requred, $rules.email]"
+                  :rules="[rules.requred, rules.email]"
                 />
               </v-col>
             </v-row>
@@ -49,11 +49,11 @@
 </template>
 
 <script lang="ts" setup>
-import rules from '@/rules';
+import { useRules } from '@/stores/rules';
 import { useMessagesStore } from '@/stores/messages';
 import { useUsers, type UserRestorePasswordForm } from '@/stores/user';
 
-const $rules = rules();
+const rules = useRules();
 const user = useUsers();
 const router = useRouter();
 const messages = useMessagesStore();

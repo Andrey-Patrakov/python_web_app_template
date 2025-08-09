@@ -35,7 +35,7 @@
                       v-model="userForm.username"
                       variant="outlined"
                       label="Имя пользователя"
-                      :rules="[$rules.requred, $rules.username]"
+                      :rules="[rules.requred, rules.username]"
                     />
                   </v-col>
                 </v-row>
@@ -48,7 +48,7 @@
                       label="E-mail"
                       :prepend-inner-icon="user.is_verified ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline'"
                       :append-inner-icon="user.is_verified || isChanged ? '' : 'mdi-send'"
-                      :rules="[$rules.requred, $rules.email]"
+                      :rules="[rules.requred, rules.email]"
                       @click:append-inner="verifyEmail"
                     />
                     <v-btn
@@ -170,12 +170,12 @@ import changePwdDialog from '@/components/user/ChangePwdDialog.vue';
 
 import { ref } from 'vue';
 import { useUsers, type UserUpdateForm } from '@/stores/user';
-import rules from '@/rules';
+import { useRules } from '@/stores/rules';
 import router from '@/router';
 import { useMessagesStore } from '@/stores/messages';
 
 const user = useUsers();
-const $rules = rules();
+const rules = useRules();
 const isValid = ref<boolean>(false);
 const showDialog = ref<boolean>(false);
 const messages = useMessagesStore();
