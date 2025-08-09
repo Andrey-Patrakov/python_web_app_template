@@ -17,8 +17,7 @@ router = APIRouter(
     status_code=status.HTTP_200_OK,
     payload_key=None,
     service_url=settings.SERVICES['users']['url'],
-    response_model='services.users.schemas.UserSchema',
-    authentication_required=True)
+    response_model='services.users.schemas.UserSchema')
 async def get_user(id: int, request: Request, response: Response):
     pass
 
