@@ -9,6 +9,7 @@ bcrypt==4.0.1
 python-jose==3.3.0
 minio==7.2.15
 pillow==11.3.0
+apscheduler==3.10.4
 
 database @ git+https://github.com/Andrey-Patrakov/app-common-db-package.git#egg=database
 storage @ git+https://github.com/Andrey-Patrakov/app-common-storage-package.git#egg=storage
